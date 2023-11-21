@@ -1,0 +1,31 @@
+@import "../placeholders.scss";
+
+.login-body {
+  @extend %flex-column;
+  display: flex;
+  padding: 40px;
+  align-items: flex-start;
+  gap: 40px;
+  align-self: stretch;
+}
+
+.login-header {
+  @extend %flex-container;
+  @extend %flex-column;
+  gap: 8px;
+}
+
+.login-h2 {
+  align-self: stretch;
+  font-weight: 700;
+  font-size: 26px;
+  margin: 0px;
+}
+
+.login-form {
+  @extend %flex-column;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 24px;
+}

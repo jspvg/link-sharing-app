@@ -1,0 +1,82 @@
+@import "./styles/colors.scss";
+@import "./styles/placeholders.scss";
+@import "./styles/components/login.scss";
+
+body {
+  @extend %flex-container;
+  font-family: Helvetica, Arial, sans-serif;
+  color: $gray;
+  padding: 196px 482px 195px 482px;
+}
+
+button {
+  color: white;
+  border: none;
+  display: flex;
+  padding: 11px 27px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  background-color: $deep-teal;
+  border-radius: 8px;
+}
+
+p {
+  @extend %flex-container;
+  color: $soft-gray;
+  margin: 0px;
+  font-size: 14px;
+}
+
+section {
+  @extend %flex-container;
+  @extend %flex-column;
+}
+
+label {
+  display: flex;
+  justify-content: start;
+  font-size: 12px;
+}
+
+a {
+  text-decoration: none;
+  color: $deep-teal;
+}
+
+.logo-header {
+  @extend %flex-container;
+  @extend %flex-column;
+  gap: 51px;
+}
+
+.logo-h2 {
+  @extend %flex-container;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.element-input {
+  @extend %flex-column;
+  display: flex;
+  align-self: stretch;
+}
+
+input[type="email"],
+input[type="password"] {
+  @extend %form-input;
+  background-repeat: no-repeat;
+  padding-left: 40px;
+  background-position: 5% center;
+}
+
+input[type="email"] {
+  background-image: url("./assets/envelope.svg");
+}
+
+input[type="password"] {
+  background-image: url("./assets/lock.svg");
+}
