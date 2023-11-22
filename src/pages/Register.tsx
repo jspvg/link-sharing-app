@@ -41,7 +41,7 @@ const Register = () => {
             />
           </div>
           <p>Password must contain at least 8 characters</p>
-          <button>Create new account</button>
+          <button className="button">Create new account</button>
           <p>
             Already have an account? <a href="/login">Login</a>
           </p>

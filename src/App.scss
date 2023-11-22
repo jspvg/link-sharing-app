@@ -2,34 +2,25 @@
 @import "./styles/placeholders.scss";
 @import "./styles/components/login.scss";
 
+#root {
+  @extend %flex-container;
+  width: 100%;
+}
+
 body {
   @extend %flex-container;
   font-family: Helvetica, Arial, sans-serif;
   color: $gray;
+  margin: 0;
 }
 
-button {
-  color: white;
-  border: none;
+nav {
   display: flex;
-  padding: 11px 27px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  background-color: $deep-teal;
-  border-radius: 8px;
-}
-
-button:hover {
-  background-color: $soft-teal;
-  box-shadow: 0px 0px 32px 0px;
-}
-
-input:focus {
-  border-color: $deep-teal;
-  box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
+  justify-content: space-between;
+  margin: 24px;
+  padding: 16px 24px;
+  height: 60px;
+  width: 100%
 }
 
 p {
@@ -90,4 +81,51 @@ input[type="email"] {
 
 input[type="password"] {
   background-image: url("./assets/lock.svg");
+}
+
+.button {
+  @extend %flex-container;
+  @extend %flex-column;
+  @extend %button;
+  color: white;
+  background-color: $deep-teal;
+}
+
+.nav-link {
+  @extend %flex-container;
+  @extend %flex-row;
+  @extend %button;
+  color: $soft-gray;
+  background-color: white;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  height: 35%;
+  align-self: center;
+}
+
+.nav-preview {
+  border: 1px solid $deep-teal;
+  color: $deep-teal;
+}
+
+.nav-link.active {
+  color: $deep-teal;
+  background-color: $pale-teal;
+}
+
+.button:hover {
+  background-color: $soft-teal;
+  box-shadow: 0px 0px 32px 0px;
+}
+
+input:focus {
+  border-color: $deep-teal;
+  box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
+}
+
+.nav-div {
+  @extend %flex-container;
+  @extend %flex-row;
+  gap: 16px;
 }

@@ -1,5 +1,11 @@
+import Navbar from "../components/Navbar";
+
 const Links = () => {
-  return <h1>Links page</h1>;
+  return (
+    <>
+      <Navbar />
+    </>
+  );
 };
 
 export default Links;

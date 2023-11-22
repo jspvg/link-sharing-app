@@ -1,11 +1,10 @@
+import Logo from "../components/Logo";
+
 const Login = () => {
   return (
     <section>
       <div className="logo-header">
-        <h2 className="logo-h2">
-          <img src="logo.svg" alt="logo" />
-          LinkSharing
-        </h2>
+        <Logo />
       </div>
 
       <div className="login-body">
@@ -14,7 +13,7 @@ const Login = () => {
           <p>Add you details below to get back into the app</p>
         </div>
 
-        <form action="links" className="login-form">
+        <form action="/" className="login-form">
           <div className="element-input">
             <label htmlFor="email">Email address</label>
             <input
@@ -33,7 +32,7 @@ const Login = () => {
               placeholder="Enter your password"
             />
           </div>
-          <button>Login</button>
+          <button className="button">Login</button>
           <p>
             Don't have an account? <a href="/register">Create account</a>
           </p>

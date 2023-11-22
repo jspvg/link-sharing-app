@@ -1,5 +1,11 @@
+import Navbar from "../components/Navbar";
+
 const Profile = () => {
-  return <h1>Profile page</h1>;
+  return (
+    <>
+      <Navbar />
+    </>
+  );
 };
 
 export default Profile;

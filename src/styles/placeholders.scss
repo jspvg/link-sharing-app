@@ -8,9 +8,23 @@
   flex-direction: column;
 }
 
+%flex-row {
+  flex-direction: row;
+}
+
 %form-input {
   margin-top: 2px;
   border: 1px solid $soft-gray;
   padding: 12px 16px;
+  border-radius: 8px;
+}
+
+%button {
+  border: none;
+  padding: 11px 27px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
   border-radius: 8px;
 }
