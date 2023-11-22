@@ -1,9 +1,11 @@
 @import "./styles/colors.scss";
 @import "./styles/placeholders.scss";
 @import "./styles/components/login.scss";
+@import "./styles/components/links.scss";
 
 #root {
   @extend %flex-container;
+  padding: 0 24px;
   width: 100%;
 }
 
@@ -20,7 +22,7 @@ nav {
   margin: 24px;
   padding: 16px 24px;
   height: 60px;
-  width: 100%
+  width: 100%;
 }
 
 p {
@@ -109,14 +111,18 @@ input[type="password"] {
   color: $deep-teal;
 }
 
+.button:hover {
+  background-color: $soft-teal;
+  box-shadow: 0px 0px 32px 0px;
+}
+
 .nav-link.active {
   color: $deep-teal;
   background-color: $pale-teal;
 }
 
-.button:hover {
-  background-color: $soft-teal;
-  box-shadow: 0px 0px 32px 0px;
+.nav-preview:hover {
+  background-color: $pale-teal;
 }
 
 input:focus {
