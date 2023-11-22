@@ -1,3 +1,4 @@
+import CustomizeLinks from "../components/CustomizeLinks";
 import MobileMockup from "../components/MobileMockup";
 import Navbar from "../components/Navbar";
 
@@ -7,7 +8,7 @@ const Links = () => {
       <Navbar />
       <div className="links-div">
         <MobileMockup />
-        <div className="mockup-div">Element two</div>
+        <CustomizeLinks />
       </div>
     </div>
   );
