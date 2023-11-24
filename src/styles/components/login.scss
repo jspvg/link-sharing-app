@@ -2,6 +2,7 @@
 
 .login-body {
   @extend %flex-column;
+  background-color: white;
   display: flex;
   align-items: flex-start;
   gap: 40px;

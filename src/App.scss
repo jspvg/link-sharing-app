@@ -13,12 +13,14 @@ body {
   @extend %flex-container;
   font-family: Helvetica, Arial, sans-serif;
   color: $gray;
+  background-color: $grayish-white;
   margin: 0;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
+  background-color: white;
   margin: 24px;
   padding: 16px 24px;
   height: 60px;
@@ -85,6 +87,25 @@ input[type="password"] {
   background-image: url("./assets/lock.svg");
 }
 
+input[type="url"] {
+  @extend %form-input;
+}
+
+.link-input {
+  @extend %flex-column;
+  background-color: $grayish-white;
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.select-input {
+  @extend %form-input;
+}
+
 .button {
   @extend %flex-container;
   @extend %flex-column;
@@ -116,7 +137,7 @@ input[type="password"] {
   box-shadow: 0px 0px 32px 0px;
 }
 
-.button:disabled{
+.button:disabled {
   background-color: $pale-gray;
 }
 
