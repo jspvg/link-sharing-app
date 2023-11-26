@@ -21,10 +21,11 @@ nav {
   display: flex;
   justify-content: space-between;
   background-color: white;
+  border-radius: 8px;
   margin: 24px;
   padding: 16px 24px;
   height: 60px;
-  width: 100%;
+  width: 97.5%;
 }
 
 p {
@@ -87,7 +88,8 @@ input[type="password"] {
   background-image: url("./assets/lock.svg");
 }
 
-input[type="url"] {
+input[type="url"],
+input[type="text"] {
   @extend %form-input;
 }
 
@@ -159,4 +161,11 @@ input:focus {
   @extend %flex-container;
   @extend %flex-row;
   gap: 16px;
+}
+
+.profile-label {
+  @extend %flex-container;
+  @extend %flex-row;
+  justify-content: left!important;
+  gap: 24px;
 }
