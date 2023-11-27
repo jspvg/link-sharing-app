@@ -1,12 +1,9 @@
+import Logo from "../components/Logo";
+
 const Register = () => {
   return (
     <section>
-      <div className="logo-header">
-        <h2 className="logo-h2">
-          <img src="logo.svg" alt="logo" />
-          LinkSharing
-        </h2>
-      </div>
+      <Logo />
       <div className="login-body">
         <div className="login-header">
           <h2 className="login-h2">Create account</h2>

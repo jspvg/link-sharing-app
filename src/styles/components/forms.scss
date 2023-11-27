@@ -1,0 +1,74 @@
+@import "../placeholders.scss";
+@import  "../colors.scss";
+
+%inputs {
+  border: 1px solid $pale-gray;
+  border-radius: 8px;
+  margin-top: 2px;
+  padding: 12px 16px;
+}
+
+%form-flex {
+  display: flex;
+  @extend %flex-column;
+}
+
+label {
+  display: flex;
+  justify-content: start;
+  font-size: 12px;
+}
+
+.element-input,
+.login-form {
+  @extend %form-flex;
+  align-self: stretch;
+}
+
+.login-form {
+  align-items: center;
+  gap: 24px;
+  padding: 0px 40px 40px 40px;
+}
+
+.link-form {
+  @extend %form-flex;
+  background-color: $grayish-white;
+  gap: 12px;
+  font-size: 12px;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.profile-label {
+  @extend %flex-container;
+  @extend %flex-row;
+  gap: 24px;
+}
+
+input[type="url"],
+input[type="text"],
+.select-input {
+  @extend %inputs;
+}
+
+input[type="email"],
+input[type="password"] {
+  @extend %inputs;
+  background-repeat: no-repeat;
+  padding-left: 40px;
+  background-position: 5% center;
+}
+
+input[type="email"] {
+  background-image: url("./assets/envelope.svg");
+}
+
+input[type="password"] {
+  background-image: url("./assets/lock.svg");
+}
+
+input:focus {
+  box-shadow: 0px 0px 20px 0px $pale-teal;
+}

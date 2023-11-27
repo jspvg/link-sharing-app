@@ -1,14 +1,17 @@
 import CustomizeLinks from "../components/CustomizeLinks";
 import MobileMockup from "../components/MobileMockup";
-import Navbar from "../components/Navbar";
+import "../styles/components/forms.scss";
 
 const Links = () => {
   return (
-    <div className="links-page">
-      <Navbar />
-      <div className="links-div">
-        <MobileMockup />
-        <CustomizeLinks />
+    <div className="page-body">
+      <div className="page-container">
+        <div className="left">
+          <MobileMockup />
+        </div>
+        <div className="right">
+          <CustomizeLinks />
+        </div>
       </div>
     </div>
   );

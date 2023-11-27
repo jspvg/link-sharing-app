@@ -1,7 +1,3 @@
-@import "../placeholders.scss";
-@import "../colors.scss";
-@import "../components/layout.scss";
-
 .customize-header {
   @extend %flex-column;
   display: flex;

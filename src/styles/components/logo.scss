@@ -1,0 +1,15 @@
+@import "../placeholders.scss";
+
+.logo-header {
+  @extend %flex-container;
+  @extend %flex-column;
+  gap: 51px;
+  padding: 0px 40px;
+}
+
+.logo-h2 {
+  @extend %flex-container;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 150%;
+}

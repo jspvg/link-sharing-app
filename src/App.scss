@@ -2,11 +2,15 @@
 @import "./styles/placeholders.scss";
 @import "./styles/components/login.scss";
 @import "./styles/components/links.scss";
+@import "./styles/components/buttons.scss";
+@import "./styles/components/forms.scss";
 
 #root {
   @extend %flex-container;
+  @extend %flex-column;
   padding: 0 24px;
   width: 100%;
+  max-width: 1440px;
 }
 
 body {
@@ -17,17 +21,6 @@ body {
   margin: 0;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  border-radius: 8px;
-  margin: 24px;
-  padding: 16px 24px;
-  height: 60px;
-  width: 97.5%;
-}
-
 p {
   @extend %flex-container;
   color: $soft-gray;
@@ -35,16 +28,16 @@ p {
   font-size: 14px;
 }
 
+h2 {
+  margin: 0px;
+}
+
 section {
   @extend %flex-container;
   @extend %flex-column;
+  gap: 51px;
   width: 476px;
-}
-
-label {
-  display: flex;
-  justify-content: start;
-  font-size: 12px;
+  height: 100vh;
 }
 
 a {
@@ -64,108 +57,4 @@ a {
   font-size: 30px;
   font-weight: 700;
   line-height: 150%;
-}
-
-.element-input {
-  @extend %flex-column;
-  display: flex;
-  align-self: stretch;
-}
-
-input[type="email"],
-input[type="password"] {
-  @extend %form-input;
-  background-repeat: no-repeat;
-  padding-left: 40px;
-  background-position: 5% center;
-}
-
-input[type="email"] {
-  background-image: url("./assets/envelope.svg");
-}
-
-input[type="password"] {
-  background-image: url("./assets/lock.svg");
-}
-
-input[type="url"],
-input[type="text"] {
-  @extend %form-input;
-}
-
-.link-input {
-  @extend %flex-column;
-  background-color: $grayish-white;
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
-  padding: 20px;
-  border-radius: 8px;
-  width: 100%;
-}
-
-.select-input {
-  @extend %form-input;
-}
-
-.button {
-  @extend %flex-container;
-  @extend %flex-column;
-  @extend %button;
-  color: white;
-  background-color: $deep-teal;
-}
-
-.nav-link {
-  @extend %flex-container;
-  @extend %flex-row;
-  @extend %button;
-  color: $soft-gray;
-  background-color: white;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  height: 35%;
-  align-self: center;
-}
-
-.nav-preview {
-  border: 1px solid $deep-teal;
-  color: $deep-teal;
-}
-
-.button:hover {
-  background-color: $soft-teal;
-  box-shadow: 0px 0px 32px 0px;
-}
-
-.button:disabled {
-  background-color: $pale-gray;
-}
-
-.nav-link.active {
-  color: $deep-teal;
-  background-color: $pale-teal;
-}
-
-.nav-preview:hover {
-  background-color: $pale-teal;
-}
-
-input:focus {
-  border-color: $deep-teal;
-  box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
-}
-
-.nav-div {
-  @extend %flex-container;
-  @extend %flex-row;
-  gap: 16px;
-}
-
-.profile-label {
-  @extend %flex-container;
-  @extend %flex-row;
-  justify-content: left!important;
-  gap: 24px;
 }

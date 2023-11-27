@@ -1,0 +1,55 @@
+@import "../colors.scss";
+@import "../placeholders.scss";
+
+%button {
+  border: none;
+  padding: 11px 27px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 8px;
+  margin: 24px;
+  padding: 16px 24px;
+  height: 60px;
+  width: 96.5%;
+}
+
+.nav-div {
+  @extend %flex-container;
+  @extend %flex-row;
+  gap: 16px;
+}
+
+.nav-link {
+  @extend %flex-container;
+  @extend %flex-row;
+  @extend %button;
+  color: $soft-gray;
+  background-color: white;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  height: 35%;
+  align-self: center;
+}
+
+.nav-preview {
+  border: 1px solid $deep-teal;
+  color: $deep-teal;
+}
+.nav-link.active {
+  color: $deep-teal;
+  background-color: $pale-teal;
+}
+
+.nav-preview:hover {
+  background-color: $pale-teal;
+}

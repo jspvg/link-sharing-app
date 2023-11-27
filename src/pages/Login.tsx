@@ -3,10 +3,7 @@ import Logo from "../components/Logo";
 const Login = () => {
   return (
     <section>
-      <div className="logo-header">
-        <Logo />
-      </div>
-
+      <Logo />
       <div className="login-body">
         <div className="login-header">
           <h2 className="login-h2">Login</h2>

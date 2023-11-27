@@ -1,7 +1,8 @@
 const CustomizeLinks = () => {
+
   const test = false;
   return (
-    <div className="customize-div">
+    <>
       <div className="customize-header">
         <h1>Customize your links</h1>
         <p className="header-p">
@@ -12,7 +13,7 @@ const CustomizeLinks = () => {
           + Add new link
         </button>
       </div>
-      <div className={`customize-body ${test ? '': 'gap-24'}`}>
+      <div className={`customize-body ${test ? "" : "gap-24"}`}>
         {test ? (
           <>
             <img
@@ -29,26 +30,14 @@ const CustomizeLinks = () => {
           </>
         ) : (
           <>
-            <form className="link-input">
+            <form className="link-form">
               <h2>Link #</h2>
               <label>Platform</label>
               <select className="select-input element-input">
-                <option value="option 1">option 1</option>
-                <option value="option 2">option 2</option>
-                <option value="option 3">option 3</option>
-                <option value="option 4">option 4</option>
-              </select>
-              <label>Link</label>
-              <input type="url" className="element-input" />
-            </form>
-            <form className="link-input">
-              <h2>Link #</h2>
-              <label>Platform</label>
-              <select className="select-input element-input">
-                <option value="option 1">option 1</option>
-                <option value="option 2">option 2</option>
-                <option value="option 3">option 3</option>
-                <option value="option 4">option 4</option>
+                <option value="Youtube">Youtube</option>
+                <option value="Github">Github</option>
+                <option value="Dribbble">Dribbble</option>
+                <option value="Linkedin">Linkedin</option>
               </select>
               <label>Link</label>
               <input type="url" className="element-input" />
@@ -62,7 +51,7 @@ const CustomizeLinks = () => {
           Save
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

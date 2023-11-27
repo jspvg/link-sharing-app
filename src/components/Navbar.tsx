@@ -1,5 +1,6 @@
 import { NavLink, useMatch } from "react-router-dom";
 import Logo from "./Logo";
+import "../styles/components/navigation.scss";
 
 const Navbar = () => {
   const homeMatch = useMatch("/");

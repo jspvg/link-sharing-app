@@ -1,0 +1,42 @@
+@import "../colors.scss";
+@import "../placeholders.scss";
+
+%button {
+  border: none;
+  padding: 11px 27px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+}
+
+.button {
+  @extend %flex-container;
+  @extend %flex-column;
+  @extend %button;
+  color: white;
+  background-color: $deep-teal;
+}
+
+.button:hover {
+  background-color: $soft-teal;
+  box-shadow: 0px 0px 32px 0px;
+}
+
+.button:disabled {
+  background-color: $pale-gray;
+}
+
+.save-button {
+  display: flex;
+  justify-content: end;
+  border-top: 1px solid $pale-gray;
+  padding: 24px 40px;
+  width: 100%;
+}
+
+.link-button {
+  align-self: stretch !important;
+  margin-bottom: 24px;
+}
