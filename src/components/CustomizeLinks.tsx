@@ -1,5 +1,6 @@
-const CustomizeLinks = () => {
+import LinkForm from "./forms/LinkForm";
 
+const CustomizeLinks = () => {
   const test = false;
   return (
     <>
@@ -30,18 +31,7 @@ const CustomizeLinks = () => {
           </>
         ) : (
           <>
-            <form className="link-form">
-              <h2>Link #</h2>
-              <label>Platform</label>
-              <select className="select-input element-input">
-                <option value="Youtube">Youtube</option>
-                <option value="Github">Github</option>
-                <option value="Dribbble">Dribbble</option>
-                <option value="Linkedin">Linkedin</option>
-              </select>
-              <label>Link</label>
-              <input type="url" className="element-input" />
-            </form>
+            <LinkForm />
           </>
         )}
       </div>
