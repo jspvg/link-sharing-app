@@ -3,6 +3,7 @@
 
 .preview-body {
   display: flex;
+  @extend %flex-row;
   flex-wrap: wrap;
   justify-content: center;
   background-color: $deep-teal;
@@ -11,10 +12,34 @@
   width: 100%;
 }
 
-.negative-margin {
+.phone {
   display: flex;
   justify-content: center;
   background-color: white;
   margin-top: 60px;
   border-radius: 40px;
+}
+
+.popup-div {
+  display: flex;
+  align-items: end;
+  margin-bottom: 20px;
+  height: 100%;
+}
+
+.popup {
+  @extend %flex-container;
+  @extend %flex-row;
+  gap: 8px;
+  background-color: $gray;
+  box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.1);
+  color: white;
+  border-radius: 8px;
+  width: 397px;
+  height: 56px;
+}
+
+.popup-img {
+  width: 20px;
+  height: 20px;
 }
