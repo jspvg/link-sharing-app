@@ -36,8 +36,7 @@ const CustomizeLinks = () => {
         )}
       </div>
       <div className="save-button">
-        {/* TODO manage disabled state */}
-        <button className="button" disabled>
+        <button className="button">
           Save
         </button>
       </div>

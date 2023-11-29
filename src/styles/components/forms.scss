@@ -1,5 +1,5 @@
 @import "../placeholders.scss";
-@import  "../colors.scss";
+@import "../colors.scss";
 
 %inputs {
   border: 1px solid $pale-gray;
@@ -31,6 +31,12 @@ label {
   padding: 0px 40px 40px 40px;
 }
 
+.form-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .link-form {
   @extend %form-flex;
   background-color: $grayish-white;
@@ -47,14 +53,14 @@ label {
   gap: 24px;
 }
 
-input[type="url"],
 input[type="text"],
 .select-input {
   @extend %inputs;
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="url"] {
   @extend %inputs;
   background-repeat: no-repeat;
   padding-left: 40px;
@@ -67,6 +73,11 @@ input[type="email"] {
 
 input[type="password"] {
   background-image: url("./assets/lock.svg");
+}
+
+input[type="url"] {
+  background-image: url("./assets/link-gray.svg");
+  background-position: 1% center !important;
 }
 
 input:focus {

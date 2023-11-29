@@ -21,11 +21,21 @@ const LinkForm = () => {
 
   return (
     <form className="link-form">
-      <h2>Link #</h2>
+      <div className="form-header">
+        <h2>Link #</h2>
+        <p>
+          <button>Remove</button>
+        </p>
+      </div>
+
       <label>Platform</label>
       <Dropdown platforms={platforms} />
       <label>Link</label>
-      <input type="url" className="element-input" />
+      <input
+        type="url"
+        className="element-input"
+        placeholder="e.g. https://www.github.com/johnappleseed"
+      />
     </form>
   );
 };

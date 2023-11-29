@@ -40,6 +40,12 @@ p {
   font-size: 14px;
 }
 
+p > button {
+  background: none;
+  border: none;
+  color: inherit;
+}
+
 h2 {
   margin: 0px;
 }

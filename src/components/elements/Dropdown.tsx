@@ -36,8 +36,8 @@ const Dropdown = ({ platforms }: DropdownProps) => {
   }, []);
 
   return (
-    <div ref={ref}>
-      <button onClick={handleDropdown} className="dropdown">
+    <div ref={ref} className="dropdown-container">
+      <button onClick={handleDropdown} className={`dropdown ${isOpen ? 'active' : ''}`}>
         <img src={selectedOption ? selectedOption.logo : ""} alt="" />
         {selectedOption ? selectedOption.name : "Select a platform"}
       </button>

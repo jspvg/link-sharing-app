@@ -1,6 +1,10 @@
 @import "../colors.scss";
 @import "../placeholders.scss";
 
+.dropdown-container {
+  position: relative;
+}
+
 .dropdown {
   display: flex;
   width: 100%;
@@ -30,6 +34,11 @@
   background-color: white;
   box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
+
+  position: absolute;
+  z-index: 1;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .option {
