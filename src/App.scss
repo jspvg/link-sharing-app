@@ -5,10 +5,12 @@
 @import "./styles/components/buttons.scss";
 @import "./styles/components/forms.scss";
 
-#root {
+#root,
+.padding,
+.no-padding {
   @extend %flex-container;
   @extend %flex-column;
-  padding: 0 24px;
+  align-self: stretch;
   width: 100%;
   max-width: 1440px;
 }
@@ -19,6 +21,15 @@ body {
   color: $gray;
   background-color: $grayish-white;
   margin: 0;
+  width: 100%;
+}
+
+.padding {
+  padding: 0 24px;
+}
+
+.no-padding {
+  padding: 0px;
 }
 
 p {

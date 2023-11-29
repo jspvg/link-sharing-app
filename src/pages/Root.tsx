@@ -4,10 +4,11 @@ import Navbar from "../components/Navbar";
 export default function Root() {
   const homeMatch = useMatch("/");
   const profileMatch = useMatch("/profile");
+  const previewMatch = useMatch("/preview");
   return (
-    <>
-      {(homeMatch || profileMatch) ? <Navbar /> : <></>}
+    <div className={previewMatch ? "no-padding" : "padding"}>
+      {homeMatch || profileMatch ? <Navbar /> : <></>}
       <Outlet />
-    </>
+    </div>
   );
 }

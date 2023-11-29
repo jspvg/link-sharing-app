@@ -28,6 +28,13 @@ nav {
   gap: 16px;
 }
 
+.nav-div-preview {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .nav-link {
   @extend %flex-container;
   @extend %flex-row;
@@ -45,6 +52,7 @@ nav {
   border: 1px solid $deep-teal;
   color: $deep-teal;
 }
+
 .nav-link.active {
   color: $deep-teal;
   background-color: $pale-teal;

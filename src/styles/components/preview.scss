@@ -1,0 +1,20 @@
+@import "../colors.scss";
+@import "../placeholders.scss";
+
+.preview-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: $deep-teal;
+  border-radius: 0px 0px 20px 20px;
+  height: 375px;
+  width: 100%;
+}
+
+.negative-margin {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  margin-top: 60px;
+  border-radius: 40px;
+}
