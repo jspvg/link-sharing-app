@@ -5,21 +5,17 @@ import "../../styles/components/dropdown.scss";
 
 interface DropdownProps {
   platforms: Platform[];
+  selectedPlatform: Platform | null;
+  onSelect: (platform: Platform | null) => void;
 }
 
-const Dropdown = ({ platforms }: DropdownProps) => {
-  const [selectedOption, setSelectedOption] = useState<Platform | null>(null);
+const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const handleDropdown = (event: React.MouseEvent) => {
     event.preventDefault();
     setIsOpen(!isOpen);
-  };
-
-  const handleSelect = (platform: Platform) => {
-    setSelectedOption(platform);
-    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -38,8 +34,8 @@ const Dropdown = ({ platforms }: DropdownProps) => {
   return (
     <div ref={ref} className="dropdown-container">
       <button onClick={handleDropdown} className={`dropdown ${isOpen ? 'active' : ''}`}>
-        <img src={selectedOption ? selectedOption.logo : ""} alt="" />
-        {selectedOption ? selectedOption.name : "Select a platform"}
+        <img src={selectedPlatform ? selectedPlatform.logo : ""} alt="" />
+        {selectedPlatform ? selectedPlatform.name : "Select a platform"}
       </button>
       {isOpen && (
         <div className="options">
@@ -47,7 +43,7 @@ const Dropdown = ({ platforms }: DropdownProps) => {
             <div
               className="option"
               key={platform.id}
-              onClick={() => handleSelect(platform)}
+              onClick={() => onSelect(platform)}
             >
               <Option platform={platform} />
             </div>

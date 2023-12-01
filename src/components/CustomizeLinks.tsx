@@ -1,7 +1,33 @@
+import useProfileContext from "../hooks/useProfileContext";
 import LinkForm from "./forms/LinkForm";
 
 const CustomizeLinks = () => {
-  const test = false;
+  const { profile, addLink, editLink, removeLink } = useProfileContext();
+
+  const handleAddLink = () => {
+    const newLink = {
+      id: Math.random().toString(36).substring(2, 15),
+      platform: {
+        id: 0,
+        name: "",
+        logo: "",
+        color: "",
+      },
+      link: "",
+    };
+    addLink(newLink);
+  };
+
+  const handleSaveLinks = () => {
+    profile.userLinks.forEach((link) => {
+      editLink(link.id, link);
+    });
+  };
+
+  const handleRemoveLink = (linkId: string) => {
+    removeLink(linkId);
+  };
+
   return (
     <>
       <div className="customize-header">
@@ -10,12 +36,28 @@ const CustomizeLinks = () => {
           Add/edit/remove links below and then share all your profiles with the
           world!
         </p>
-        <button className="nav-link nav-preview link-button">
+        <button
+          className="nav-link nav-preview link-button"
+          onClick={handleAddLink}
+        >
           + Add new link
         </button>
       </div>
-      <div className={`customize-body ${test ? "" : "gap-24"}`}>
-        {test ? (
+      <div
+        className={`customize-body ${profile.userLinks.length ? "" : "gap-24"}`}
+      >
+        {profile.userLinks.length ? (
+          <>
+            {profile.userLinks.map((link, index) => (
+              <LinkForm
+                key={link.id}
+                index={index}
+                link={link}
+                onDelete={() => handleRemoveLink(link.id)}
+              />
+            ))}
+          </>
+        ) : (
           <>
             <img
               className="customize-img"
@@ -29,14 +71,10 @@ const CustomizeLinks = () => {
               you share your profiles with everyone!
             </p>
           </>
-        ) : (
-          <>
-            <LinkForm />
-          </>
         )}
       </div>
       <div className="save-button">
-        <button className="button">
+        <button className="button" onClick={handleSaveLinks}>
           Save
         </button>
       </div>
