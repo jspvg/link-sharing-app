@@ -1,6 +1,29 @@
+import { useForm } from "react-hook-form";
 import Logo from "../components/Logo";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { baseSchema } from "../lib/validation/validationSchema";
+import { z } from "zod";
+import { useNavigate } from "react-router-dom";
+
+type LoginForm = z.infer<typeof baseSchema>;
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(baseSchema),
+    mode: "onBlur",
+  });
+
+  const loginUser = (data: LoginForm) => {
+    console.log("logged in user", data);
+    navigate("/");
+  };
+
   return (
     <section>
       <Logo />
@@ -10,26 +33,36 @@ const Login = () => {
           <p>Add you details below to get back into the app</p>
         </div>
 
-        <form action="/" className="login-form">
+        <form
+          action="submit"
+          onSubmit={handleSubmit(loginUser)}
+          className="login-form"
+        >
           <div className="element-input">
             <label htmlFor="email">Email address</label>
             <input
               type="email"
-              name="email"
               id="email"
               placeholder="eg. alex@email.com"
+              {...register("email")}
             />
+            {errors.email && <p className="error">{errors.email.message}</p>}
           </div>
           <div className="element-input">
             <label htmlFor="password">Password</label>
             <input
               type="password"
-              name="password"
               id="password"
               placeholder="Enter your password"
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="error">{errors.password.message}</p>
+            )}
           </div>
-          <button className="button">Login</button>
+          <button type="submit" className="button">
+            Login
+          </button>
           <p>
             Don't have an account? <a href="/register">Create account</a>
           </p>

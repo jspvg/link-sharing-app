@@ -40,6 +40,10 @@ p {
   font-size: 14px;
 }
 
+.error {
+  color: $muted-red!important;
+}
+
 p > button {
   background: none;
   border: none;
