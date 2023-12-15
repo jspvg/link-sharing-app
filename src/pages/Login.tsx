@@ -4,6 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { baseSchema } from "../lib/validation/validationSchema";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 type LoginForm = z.infer<typeof baseSchema>;
 
@@ -19,9 +25,20 @@ const Login = () => {
     mode: "onBlur",
   });
 
-  const loginUser = (data: LoginForm) => {
-    console.log("logged in user", data);
-    navigate("/");
+  const loginUser = async (data: LoginForm) => {
+    const { email, password } = data;
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error("Error logging in:", error.message);
+    } else {
+      console.log("Success logging in!");
+      navigate("/");
+    }
   };
 
   return (

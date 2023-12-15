@@ -2,10 +2,17 @@ import { z } from "zod";
 import Logo from "../components/Logo";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const baseSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8).max(25),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(8, "Password must be at least 8 characters").max(25),
   passwordConfirm: z.string().min(8).max(25),
 });
 
@@ -21,6 +28,8 @@ const schema = baseSchema
 type RegisterForm = z.infer<typeof schema>;
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -30,8 +39,20 @@ const Register = () => {
     mode: "onBlur",
   });
 
-  const registerUser = (data: RegisterForm) => {
-    console.log(data);
+  const registerUser = async (formData: RegisterForm) => {
+    const { email, password } = formData;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error("Error signing up:", error.message);
+    } else {
+      console.log("Success registration!");
+      navigate("/login");
+    }
   };
 
   return (
