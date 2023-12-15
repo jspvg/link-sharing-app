@@ -2,13 +2,8 @@ import { z } from "zod";
 import Logo from "../components/Logo";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../lib/api/supabase";
 
 const baseSchema = z.object({
   email: z.string().email("Invalid email"),

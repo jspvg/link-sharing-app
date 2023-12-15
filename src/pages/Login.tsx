@@ -4,12 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { baseSchema } from "../lib/validation/validationSchema";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../lib/api/supabase";
 
 type LoginForm = z.infer<typeof baseSchema>;
 
