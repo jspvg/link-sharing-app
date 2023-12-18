@@ -5,10 +5,14 @@ import { baseSchema } from "../lib/validation/validationSchema";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/api/supabase";
+import { useState } from "react";
+import Popup from "../components/elements/Popup";
 
 type LoginForm = z.infer<typeof baseSchema>;
 
 const Login = () => {
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -29,9 +33,10 @@ const Login = () => {
     });
 
     if (error) {
-      console.error("Error logging in:", error.message);
+      setIsError(true);
+      setErrorMessage(error.message);
+      setTimeout(() => setIsError(false), 7000);
     } else {
-      console.log("Success logging in!");
       navigate("/");
     }
   };
@@ -79,6 +84,7 @@ const Login = () => {
             Don't have an account? <a href="/register">Create account</a>
           </p>
         </form>
+        {isError && <Popup message={errorMessage} />}
       </div>
     </section>
   );
