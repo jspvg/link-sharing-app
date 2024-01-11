@@ -1,23 +1,13 @@
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../../lib/api/supabase';
-import { User } from '@supabase/supabase-js';
+import useUser from '../../hooks/useUser';
 
 type ProtectedRouteProps = {
   children: ReactNode;
 };
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data?.user ?? null);
-      setLoading(false);
-    })();
-  }, []);
+  const { user, loading } = useUser();
 
   if (loading) {
     return <div>Loading...</div>; // Or your preferred loading state

@@ -8,6 +8,10 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import './App.scss';
 import ProtectedRoute from './components/wrappers/ProtectedRoute';
+import LogoutPrompt from './components/elements/LogoutPrompt';
+import AuthWrapper from './components/wrappers/AuthWrapper';
+import PageNotFound from './pages/404';
+import Landing from './pages/Landing';
 
 const Router = createBrowserRouter([
   {
@@ -30,8 +34,22 @@ const Router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: 'login', element: <Login /> },
-      { path: 'register', element: <Register /> },
+      {
+        path: 'login',
+        element: (
+          <AuthWrapper>
+            <Login />
+          </AuthWrapper>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <AuthWrapper>
+            <Register />
+          </AuthWrapper>
+        ),
+      },
       {
         path: 'Preview',
         element: (
@@ -39,6 +57,22 @@ const Router = createBrowserRouter([
             <Preview />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: 'logout',
+        element: (
+          <ProtectedRoute>
+            <LogoutPrompt />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'landing',
+        element: <Landing />,
+      },
+      {
+        path: '*',
+        element: <PageNotFound />,
       },
     ],
   },

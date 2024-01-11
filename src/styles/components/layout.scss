@@ -1,3 +1,5 @@
+@import '../colors.scss', '../placeholders.scss';
+
 %page-section {
   @extend %flex-container;
   @extend %flex-column;
@@ -7,26 +9,41 @@
   align-self: stretch;
 }
 
-.page-body {
+.page-body,
+.body-landing {
   @extend %flex-container;
   @extend %flex-column;
   gap: 24px;
   width: 100%;
 }
 
-.page-container {
+.body-landing {
+  height: 100dvh;
+}
+
+.page-container,
+.page-landing {
   @extend %flex-container;
   @extend %flex-row;
-  background-color: $grayish-white;
   border-radius: 8px;
   gap: 24px;
   margin: 0px 24px 24px;
   width: 100%;
 }
 
+.page-container {
+  background-color: $grayish-white;
+}
+
+.page-landing {
+  flex-direction: column;
+  background-color: white;
+  height: 80dvh;
+}
+
 .left {
   @extend %page-section;
-  justify-content: flex-start!important;
+  justify-content: flex-start !important;
   padding: 24px;
   width: 40%;
 }
@@ -35,4 +52,18 @@
   @extend %page-section;
   padding: 40px;
   width: 60%;
+}
+
+.message {
+  @extend %flex-container;
+  height: 100dvh;
+
+  p {
+    background-color: white;
+    border-radius: 10px;
+    color: $gray;
+    font-weight: 700;
+    font-size: large;
+    padding: 3rem;
+  }
 }
