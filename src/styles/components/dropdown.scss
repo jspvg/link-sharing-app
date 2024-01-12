@@ -1,5 +1,4 @@
-@import "../colors.scss";
-@import "../placeholders.scss";
+@import '../colors.scss';
 
 .dropdown-container {
   position: relative;
@@ -26,25 +25,21 @@
   width: 96%;
   padding: 12px 16px;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 12px;
   border-radius: 8px;
   border: 1px solid #d9d9d9;
   background-color: white;
   box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.1);
   margin-top: 5px;
-
   position: absolute;
   z-index: 1;
   max-height: 300px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .option {
   display: flex;
   flex-direction: row;
-  padding-bottom: 12px;
+  padding: 12px 0;
   width: 100%;
   border-bottom: 1px solid #d9d9d9;
 }

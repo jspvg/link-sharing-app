@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { Platform } from "../../lib/types";
-import Option from "./Option";
-import "../../styles/components/dropdown.scss";
+import { useEffect, useRef, useState } from 'react';
+import { Platform } from '../../lib/types';
+import Option from './Option';
+import '../../styles/components/dropdown.scss';
 
 interface DropdownProps {
   platforms: Platform[];
@@ -25,17 +25,20 @@ const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
     <div ref={ref} className="dropdown-container">
-      <button onClick={handleDropdown} className={`dropdown ${isOpen ? 'active' : ''}`}>
-        <img src={selectedPlatform ? selectedPlatform.logo : ""} alt="" />
-        {selectedPlatform ? selectedPlatform.name : "Select a platform"}
+      <button
+        onClick={handleDropdown}
+        className={`dropdown ${isOpen ? 'active' : ''}`}
+      >
+        <img src={selectedPlatform ? selectedPlatform.logo : ''} alt="" />
+        {selectedPlatform ? selectedPlatform.name : 'Select a platform'}
       </button>
       {isOpen && (
         <div className="options">

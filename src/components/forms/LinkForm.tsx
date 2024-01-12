@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Platform, Link } from "../../lib/types";
-import { fetchPlatforms } from "../../lib/api";
-import Dropdown from "../elements/Dropdown";
+import { useEffect, useState } from 'react';
+import { Platform, Link } from '../../lib/types';
+import { fetchPlatforms } from '../../lib/api/queries';
+import Dropdown from '../elements/Dropdown';
 
 interface LinkFormProps {
   index: number;
@@ -15,16 +15,16 @@ const LinkForm = ({ index, link, onDelete }: LinkFormProps) => {
   const [linkUrl, setLinkUrl] = useState(link.link);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getPlatforms = async () => {
       try {
-        const data = await fetchPlatforms();
-        setPlatforms(data);
+        const platforms = await fetchPlatforms();
+        setPlatforms(platforms);
       } catch (err) {
-        console.error("Data could not be fetched: ", err);
+        console.error('Data could not be fetched: ', err);
       }
     };
 
-    fetchData();
+    getPlatforms();
   }, []);
 
   return (
