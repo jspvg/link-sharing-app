@@ -37,7 +37,7 @@ const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
         onClick={handleDropdown}
         className={`dropdown ${isOpen ? 'active' : ''}`}
       >
-        <img src={selectedPlatform ? selectedPlatform.logo : ''} alt="" />
+        <img src={selectedPlatform ? selectedPlatform.logo : 'Seelect a platform'} alt="" />
         {selectedPlatform ? selectedPlatform.name : 'Select a platform'}
       </button>
       {isOpen && (

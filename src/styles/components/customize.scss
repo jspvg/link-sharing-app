@@ -1,3 +1,5 @@
+@import '../colors.scss', '../placeholders.scss';
+
 .customize-header {
   @extend %flex-column;
   display: flex;
@@ -31,4 +33,23 @@
   line-height: 150%;
   width: 50%;
   margin-bottom: 20px;
+}
+
+.added-platforms {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.platform {
+  display: flex;
+  gap: 9px;
+  background-color: $pale-gray;
+  border-radius: 5px;
+  padding: 5px;
+
+  button {
+    border: none;
+    background-color: $pale-gray;
+  }
 }

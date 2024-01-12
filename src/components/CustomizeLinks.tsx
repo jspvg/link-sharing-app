@@ -1,31 +1,57 @@
-import useProfileContext from "../hooks/useProfileContext";
-import LinkForm from "./forms/LinkForm";
+import { useEffect, useState } from 'react';
+import { Platform } from '../lib/types';
+import { fetchPlatforms } from '../lib/api/queries';
+import Dropdown from './elements/Dropdown';
+import '../styles/components/customize.scss';
+
+type UserPlatform = {
+  platform: Platform | null;
+  linkUrl: string;
+};
 
 const CustomizeLinks = () => {
-  const { profile, addLink, editLink, removeLink } = useProfileContext();
+  const [platforms, setPlatforms] = useState<Platform[]>([]);
+  const [platform, setPlatform] = useState<Platform | null>(null);
+  const [linkUrl, setLinkUrl] = useState('');
+  const [isActive, setIsActive] = useState(false);
+  const [userPlatforms, setUserPlatforms] = useState<UserPlatform[]>([]);
+
+  useEffect(() => {
+    const getPlatforms = async () => {
+      try {
+        const platforms = await fetchPlatforms();
+        setPlatforms(platforms);
+      } catch (err) {
+        console.error('Data could not be fetched: ', err);
+      }
+    };
+
+    getPlatforms();
+  }, []);
+
+  const handleRemovePlatform = (index: number) => {
+    const newUserPlatforms = [...userPlatforms];
+    newUserPlatforms.splice(index, 1);
+    setUserPlatforms(newUserPlatforms);
+  };
 
   const handleAddLink = () => {
-    const newLink = {
-      id: Math.random().toString(36).substring(2, 15),
-      platform: {
-        id: 0,
-        name: "",
-        logo: "",
-        color: "",
-      },
-      link: "",
+    setIsActive(true);
+  };
+
+  const handleSaveLink = () => {
+    const newUserPlatform: UserPlatform = {
+      platform,
+      linkUrl,
     };
-    addLink(newLink);
+    setUserPlatforms([...userPlatforms, newUserPlatform]);
+    setIsActive(false);
+    setPlatform(null);
+    setLinkUrl('');
   };
 
-  const handleSaveLinks = () => {
-    profile.userLinks.forEach((link) => {
-      editLink(link.id, link);
-    });
-  };
-
-  const handleRemoveLink = (linkId: string) => {
-    removeLink(linkId);
+  const handleCancelAdd = () => {
+    setIsActive(false);
   };
 
   return (
@@ -33,7 +59,7 @@ const CustomizeLinks = () => {
       <div className="customize-header">
         <h1>Customize your links</h1>
         <p className="header-p">
-          Add/edit/remove links below and then share all your profiles with the
+          Add/remove links below and then share all your profiles with the
           world!
         </p>
         <button
@@ -43,38 +69,51 @@ const CustomizeLinks = () => {
           + Add new link
         </button>
       </div>
-      <div
-        className={`customize-body ${profile.userLinks.length ? "" : "gap-24"}`}
-      >
-        {profile.userLinks.length ? (
-          <>
-            {profile.userLinks.map((link, index) => (
-              <LinkForm
-                key={link.id}
-                index={index}
-                link={link}
-                onDelete={() => handleRemoveLink(link.id)}
-              />
-            ))}
-          </>
-        ) : (
-          <>
-            <img
-              className="customize-img"
-              src="../src/assets/customize.svg"
-              alt="hand scrolling on phone"
+      <div className="added-platforms">
+        {Array.from({ length: 5 }).map((_, index) => {
+          const userPlatform = userPlatforms[index];
+          return userPlatform ? (
+            <div className="platform" key={index}>
+              <img src={userPlatform.platform?.logo} alt="" />
+              <p>{userPlatform.platform?.name}</p>
+              <button onClick={() => handleRemovePlatform(index)}>x</button>
+            </div>
+          ) : (
+            <div className="platform" key={index}>
+              {/* TODO Render empty platform component */}
+            </div>
+          );
+        })}
+      </div>
+      <div className={`customize-body`}>
+        {isActive && (
+          <form className="link-form">
+            <div className="form-header">
+              <h2>New Link</h2>
+              <p>
+                <button onClick={handleCancelAdd}>Cancel</button>
+              </p>
+            </div>
+
+            <label>Platform</label>
+            <Dropdown
+              platforms={platforms}
+              selectedPlatform={platform}
+              onSelect={setPlatform}
             />
-            <h1>Let's get you started</h1>
-            <p className="customize-p">
-              Use the “Add new link” button to get started. Once you have more
-              than one link, you can reorder and edit them. We're here to help
-              you share your profiles with everyone!
-            </p>
-          </>
+            <label>Link</label>
+            <input
+              type="url"
+              className="element-input"
+              placeholder="e.g. https://www.github.com/johnappleseed"
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+            />
+          </form>
         )}
       </div>
       <div className="save-button">
-        <button className="button" onClick={handleSaveLinks}>
+        <button className="button" onClick={handleSaveLink}>
           Save
         </button>
       </div>
