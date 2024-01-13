@@ -5,8 +5,8 @@ import '../../styles/components/dropdown.scss';
 
 interface DropdownProps {
   platforms: Platform[];
-  selectedPlatform: Platform | null;
-  onSelect: (platform: Platform | null) => void;
+  selectedPlatform: Platform;
+  onSelect: (platform: Platform) => void;
 }
 
 const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
@@ -37,7 +37,7 @@ const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
         onClick={handleDropdown}
         className={`dropdown ${isOpen ? 'active' : ''}`}
       >
-        <img src={selectedPlatform ? selectedPlatform.logo : 'Seelect a platform'} alt="" />
+        <img src={selectedPlatform ? selectedPlatform.logo_gray : 'Seelect a platform'} alt="" />
         {selectedPlatform ? selectedPlatform.name : 'Select a platform'}
       </button>
       {isOpen && (
@@ -45,7 +45,7 @@ const Dropdown = ({ platforms, selectedPlatform, onSelect }: DropdownProps) => {
           {platforms.map((platform) => (
             <div
               className="option"
-              key={platform.id}
+              key={platform.name}
               onClick={() => onSelect(platform)}
             >
               <Option platform={platform} />

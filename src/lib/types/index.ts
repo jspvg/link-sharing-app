@@ -1,8 +1,19 @@
 export type Platform = {
-  id: number;
+  id: string;
   name: string;
-  logo: string;
+  logo_gray: string;
+  logo_white: string;
   color: string;
+};
+
+export type UserPlatform = Platform & {
+  user_id: string;
+  platform_id: string;
+  url: string;
+};
+
+export type UserPlatformData = UserPlatform & {
+  platforms: Platform[];
 };
 
 export type Link = {

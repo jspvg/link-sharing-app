@@ -6,7 +6,7 @@ interface OptionProps {
 
 const Option = ({ platform }: OptionProps) => (
   <div className="option-gap">
-    <img src={platform.logo} alt={platform.name} />
+    <img src={platform.logo_gray} alt={platform.name} />
     {platform.name}
   </div>
 );

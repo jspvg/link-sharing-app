@@ -1,20 +1,45 @@
-import { useEffect, useState } from 'react';
-import { Platform } from '../lib/types';
-import { fetchPlatforms } from '../lib/api/queries';
+import { useCallback, useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { Platform, UserPlatformData } from '../lib/types';
+import { fetchPlatforms, fetchUserPlatforms } from '../lib/api/queries';
 import Dropdown from './elements/Dropdown';
 import '../styles/components/customize.scss';
+import useUser from '../hooks/useUser';
+import SmallPlatform from './platform/SmallPlatform';
 
-type UserPlatform = {
-  platform: Platform | null;
-  linkUrl: string;
+const emptyUserPlatform = {
+  id: '',
+  name: '',
+  logo_gray: '',
+  logo_white: '',
+  color: '',
+  url: '',
 };
 
 const CustomizeLinks = () => {
   const [platforms, setPlatforms] = useState<Platform[]>([]);
-  const [platform, setPlatform] = useState<Platform | null>(null);
-  const [linkUrl, setLinkUrl] = useState('');
+  const [platform, setPlatform] = useState<Platform>(emptyUserPlatform);
+  const [url, seturl] = useState('');
   const [isActive, setIsActive] = useState(false);
-  const [userPlatforms, setUserPlatforms] = useState<UserPlatform[]>([]);
+  const [userPlatforms, setUserPlatforms] = useState<UserPlatformData[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [data, setData] = useState<UserPlatformData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserPlatforms(user.id)
+        .then((fetchedData) => {
+          setData(fetchedData);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error('Error fetching user platforms:', err);
+          setLoading(false);
+        });
+    }
+  }, [user]);
 
   useEffect(() => {
     const getPlatforms = async () => {
@@ -29,30 +54,45 @@ const CustomizeLinks = () => {
     getPlatforms();
   }, []);
 
-  const handleRemovePlatform = (index: number) => {
-    const newUserPlatforms = [...userPlatforms];
-    newUserPlatforms.splice(index, 1);
-    setUserPlatforms(newUserPlatforms);
-  };
+  const handleRemovePlatform = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const index = Number(event.target);
+      setUserPlatforms((prevPlatforms) =>
+        prevPlatforms.filter((_, i) => i !== index),
+      );
+    },
+    [],
+  );
 
-  const handleAddLink = () => {
+  const handleAddLink = useCallback(() => {
     setIsActive(true);
-  };
+  }, []);
 
-  const handleSaveLink = () => {
-    const newUserPlatform: UserPlatform = {
-      platform,
-      linkUrl,
+  const handleSaveLink = useCallback(() => {
+    const newUserPlatform: UserPlatformData = {
+      id: uuidv4(),
+      name: platform?.name,
+      logo_gray: platform?.logo_gray,
+      logo_white: platform?.logo_white,
+      color: platform?.color,
+      user_id: user!.id,
+      platform_id: platform.id,
+      platforms,
+      url,
     };
     setUserPlatforms([...userPlatforms, newUserPlatform]);
     setIsActive(false);
-    setPlatform(null);
-    setLinkUrl('');
-  };
+    setPlatform(emptyUserPlatform);
+    seturl('');
+  }, [platform, url, userPlatforms, user, platforms]);
 
-  const handleCancelAdd = () => {
+  const handleCancelAdd = useCallback(() => {
     setIsActive(false);
-  };
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -70,20 +110,14 @@ const CustomizeLinks = () => {
         </button>
       </div>
       <div className="added-platforms">
-        {Array.from({ length: 5 }).map((_, index) => {
-          const userPlatform = userPlatforms[index];
-          return userPlatform ? (
-            <div className="platform" key={index}>
-              <img src={userPlatform.platform?.logo} alt="" />
-              <p>{userPlatform.platform?.name}</p>
-              <button onClick={() => handleRemovePlatform(index)}>x</button>
-            </div>
-          ) : (
-            <div className="platform" key={index}>
-              {/* TODO Render empty platform component */}
-            </div>
-          );
-        })}
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SmallPlatform
+            key={index}
+            userPlatform={userPlatforms[index]}
+            index={index}
+            handleRemovePlatform={handleRemovePlatform}
+          />
+        ))}
       </div>
       <div className={`customize-body`}>
         {isActive && (
@@ -106,14 +140,18 @@ const CustomizeLinks = () => {
               type="url"
               className="element-input"
               placeholder="e.g. https://www.github.com/johnappleseed"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
+              value={url}
+              onChange={(e) => seturl(e.target.value)}
             />
           </form>
         )}
       </div>
       <div className="save-button">
-        <button className="button" onClick={handleSaveLink}>
+        <button
+          className="button"
+          onClick={handleSaveLink}
+          disabled={!isActive}
+        >
           Save
         </button>
       </div>
