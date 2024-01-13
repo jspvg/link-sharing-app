@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Platform, UserPlatformData } from '../lib/types';
 import { fetchPlatforms, fetchUserPlatforms } from '../lib/api/queries';
 import Dropdown from './elements/Dropdown';
 import '../styles/components/customize.scss';
 import useUser from '../hooks/useUser';
 import SmallPlatform from './platform/SmallPlatform';
+import { addUserPlatform, deleteUserPlatform } from '../lib/api/mutations';
 
 const emptyUserPlatform = {
-  id: '',
+  platform_id: '',
   name: '',
   logo_gray: '',
   logo_white: '',
@@ -55,13 +55,27 @@ const CustomizeLinks = () => {
   }, []);
 
   const handleRemovePlatform = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      const index = Number(event.target);
+    async (event: React.MouseEvent<HTMLButtonElement>) => {
+      const index = Number(event.currentTarget.getAttribute('data-index'));
+      const platformToRemove = data[index];
+
+      // Delete the platform from the database
+      try {
+        await deleteUserPlatform({
+          user_id: platformToRemove.user_id,
+          platform_id: platformToRemove.platform_id,
+        });
+      } catch (error) {
+        console.error('Failed to delete platform:', error);
+        return;
+      }
+
+      // Remove the platform from the local state
       setUserPlatforms((prevPlatforms) =>
         prevPlatforms.filter((_, i) => i !== index),
       );
     },
-    [],
+    [data],
   );
 
   const handleAddLink = useCallback(() => {
@@ -70,13 +84,12 @@ const CustomizeLinks = () => {
 
   const handleSaveLink = useCallback(() => {
     const newUserPlatform: UserPlatformData = {
-      id: uuidv4(),
       name: platform?.name,
       logo_gray: platform?.logo_gray,
       logo_white: platform?.logo_white,
       color: platform?.color,
       user_id: user!.id,
-      platform_id: platform.id,
+      platform_id: platform.platform_id,
       platforms,
       url,
     };
@@ -84,6 +97,7 @@ const CustomizeLinks = () => {
     setIsActive(false);
     setPlatform(emptyUserPlatform);
     seturl('');
+    addUserPlatform(newUserPlatform);
   }, [platform, url, userPlatforms, user, platforms]);
 
   const handleCancelAdd = useCallback(() => {
@@ -110,10 +124,10 @@ const CustomizeLinks = () => {
         </button>
       </div>
       <div className="added-platforms">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {!loading && Array.from({ length: 5 }).map((_, index) => (
           <SmallPlatform
             key={index}
-            userPlatform={userPlatforms[index]}
+            userPlatform={data[index]}
             index={index}
             handleRemovePlatform={handleRemovePlatform}
           />

@@ -1,5 +1,5 @@
 export type Platform = {
-  id: string;
+  platform_id: string;
   name: string;
   logo_gray: string;
   logo_white: string;

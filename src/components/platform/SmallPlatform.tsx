@@ -10,16 +10,17 @@ const SmallPlatform = ({
   userPlatform,
   index,
   handleRemovePlatform,
-}: SmallPlatformProps) =>
-  userPlatform ? (
+}: SmallPlatformProps) => {
+
+  return userPlatform ? (
     <div
       className="platform"
       key={index}
-      style={{ backgroundColor: `${userPlatform.color}` }}
+      style={{ backgroundColor: `${userPlatform.platforms.color}` }}
     >
       <div>
-        <img src={userPlatform.logo_white} alt="" />
-        <p style={{ color: 'white' }}>{userPlatform.name}</p>
+        <img src={userPlatform.platforms.logo_white} alt="" />
+        <p style={{ color: 'white' }}>{userPlatform.platforms.name}</p>
       </div>
       <button
         data-index={index}
@@ -33,5 +34,6 @@ const SmallPlatform = ({
       {/* Render empty platform elements as placeholders */}
     </div>
   );
+};
 
 export default SmallPlatform;

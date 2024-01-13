@@ -1,18 +1,18 @@
-import { useForm } from "react-hook-form";
-import Logo from "../components/Logo";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { baseSchema } from "../lib/validation/validationSchema";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/api/supabase";
-import { useState } from "react";
-import Popup from "../components/elements/Popup";
+import { useForm } from 'react-hook-form';
+import Logo from '../components/Logo';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { baseLoginSchema } from '../lib/validation/validationSchemas';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/api/supabase';
+import { useState } from 'react';
+import Popup from '../components/elements/Popup';
 
-type LoginForm = z.infer<typeof baseSchema>;
+type LoginForm = z.infer<typeof baseLoginSchema>;
 
 const Login = () => {
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const {
@@ -20,8 +20,8 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
-    resolver: zodResolver(baseSchema),
-    mode: "onBlur",
+    resolver: zodResolver(baseLoginSchema),
+    mode: 'onBlur',
   });
 
   const loginUser = async (data: LoginForm) => {
@@ -37,7 +37,7 @@ const Login = () => {
       setErrorMessage(error.message);
       setTimeout(() => setIsError(false), 7000);
     } else {
-      navigate("/");
+      navigate('/');
     }
   };
 
@@ -61,7 +61,7 @@ const Login = () => {
               type="email"
               id="email"
               placeholder="eg. alex@email.com"
-              {...register("email")}
+              {...register('email')}
             />
             {errors.email && <p className="error">{errors.email.message}</p>}
           </div>
@@ -71,7 +71,7 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Enter your password"
-              {...register("password")}
+              {...register('password')}
             />
             {errors.password && (
               <p className="error">{errors.password.message}</p>
