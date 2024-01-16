@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Platform, UserPlatform } from '../lib/types';
-import { fetchPlatforms } from '../lib/api/queries';
 import Dropdown from './elements/Dropdown';
 import useUser from '../hooks/useUser';
 import SmallPlatform from './platform/SmallPlatform';
 import { addUserPlatform, deleteUserPlatform } from '../lib/api/mutations';
 import '../styles/components/customize.scss';
+import usePlatforms from '../hooks/usePlatforms';
 
 const emptyPlatform = {
   platform_id: '',
@@ -27,7 +27,7 @@ const CustomizeLinks = ({
 
   const [isLoadingUserPlatforms, setIsLoadingUserPlatforms] = useState(true);
 
-  const [platforms, setPlatforms] = useState<Platform[]>([]);
+  const platforms = usePlatforms();
   const [selectedPlatform, setSelectedPlatform] =
     useState<Platform>(emptyPlatform);
   const [platformUrl, setPlatformUrl] = useState('');
@@ -39,19 +39,6 @@ const CustomizeLinks = ({
       setIsLoadingUserPlatforms(false);
     }
   }, [userPlatforms]);
-
-  const fetchAndSetPlatforms = useCallback(async () => {
-    try {
-      const fetchedPlatforms = await fetchPlatforms();
-      setPlatforms(fetchedPlatforms);
-    } catch (err) {
-      console.error('Data could not be fetched: ', err);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAndSetPlatforms();
-  }, [fetchAndSetPlatforms]);
 
   const handleRemovePlatform = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,7 +113,6 @@ const CustomizeLinks = ({
       <div className="added-platforms">
         {Array.from({ length: 5 }).map((_, index) => {
           if (index < userPlatforms.length) {
-            // Render SmallPlatform with userPlatform data
             return (
               <SmallPlatform
                 key={index}
@@ -136,7 +122,6 @@ const CustomizeLinks = ({
               />
             );
           } else {
-            // Render placeholder
             return (
               <div className="platform" key={index}>
                 {/* Render empty platform elements as placeholders */}
