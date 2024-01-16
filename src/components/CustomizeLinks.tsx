@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Platform, UserPlatformData } from '../lib/types';
+import { Platform, UserPlatform } from '../lib/types';
 import { fetchPlatforms, fetchUserPlatforms } from '../lib/api/queries';
 import Dropdown from './elements/Dropdown';
-import '../styles/components/customize.scss';
 import useUser from '../hooks/useUser';
 import SmallPlatform from './platform/SmallPlatform';
 import { addUserPlatform, deleteUserPlatform } from '../lib/api/mutations';
+import '../styles/components/customize.scss';
 
-const emptyUserPlatform = {
+const emptyPlatform = {
   platform_id: '',
   name: '',
   logo_gray: '',
@@ -17,49 +17,50 @@ const emptyUserPlatform = {
 };
 
 const CustomizeLinks = () => {
-  const [platforms, setPlatforms] = useState<Platform[]>([]);
-  const [platform, setPlatform] = useState<Platform>(emptyUserPlatform);
-  const [url, seturl] = useState('');
-  const [isActive, setIsActive] = useState(false);
-  const [userPlatforms, setUserPlatforms] = useState<UserPlatformData[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<UserPlatformData[]>([]);
-  const [loading, setLoading] = useState(true);
   const { user } = useUser();
 
-  useEffect(() => {
+  const [userPlatforms, setUserPlatforms] = useState<UserPlatform[]>([]);
+  const [isLoadingUserPlatforms, setIsLoadingUserPlatforms] = useState(true);
+
+  const [platforms, setPlatforms] = useState<Platform[]>([]);
+  const [selectedPlatform, setSelectedPlatform] =
+    useState<Platform>(emptyPlatform);
+  const [platformUrl, setPlatformUrl] = useState('');
+
+  const [isAddingPlatform, setIsAddingPlatform] = useState(false);
+
+  const fetchAndSetUserPlatforms = useCallback(async () => {
     if (user) {
-      fetchUserPlatforms(user.id)
-        .then((fetchedData) => {
-          setData(fetchedData);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error('Error fetching user platforms:', err);
-          setLoading(false);
-        });
+      try {
+        const fetchedUserPlatforms = await fetchUserPlatforms(user.id);
+        setUserPlatforms(fetchedUserPlatforms);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoadingUserPlatforms(false);
+      }
     }
   }, [user]);
 
-  useEffect(() => {
-    const getPlatforms = async () => {
-      try {
-        const platforms = await fetchPlatforms();
-        setPlatforms(platforms);
-      } catch (err) {
-        console.error('Data could not be fetched: ', err);
-      }
-    };
-
-    getPlatforms();
+  const fetchAndSetPlatforms = useCallback(async () => {
+    try {
+      const fetchedPlatforms = await fetchPlatforms();
+      setPlatforms(fetchedPlatforms);
+    } catch (err) {
+      console.error('Data could not be fetched: ', err);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchAndSetUserPlatforms();
+    fetchAndSetPlatforms();
+  }, [fetchAndSetPlatforms, fetchAndSetUserPlatforms]);
 
   const handleRemovePlatform = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       const index = Number(event.currentTarget.getAttribute('data-index'));
-      const platformToRemove = data[index];
+      const platformToRemove = userPlatforms[index];
 
-      // Delete the platform from the database
       try {
         await deleteUserPlatform({
           user_id: platformToRemove.user_id,
@@ -70,41 +71,43 @@ const CustomizeLinks = () => {
         return;
       }
 
-      // Remove the platform from the local state
       setUserPlatforms((prevPlatforms) =>
         prevPlatforms.filter((_, i) => i !== index),
       );
     },
-    [data],
+    [userPlatforms],
   );
 
   const handleAddLink = useCallback(() => {
-    setIsActive(true);
-  }, []);
+    if (userPlatforms.length >= 5) {
+      alert('You cannot add more than 5 platforms.');
+      return;
+    }
+
+    setIsAddingPlatform(true);
+  }, [userPlatforms]);
 
   const handleSaveLink = useCallback(() => {
-    const newUserPlatform: UserPlatformData = {
-      name: platform?.name,
-      logo_gray: platform?.logo_gray,
-      logo_white: platform?.logo_white,
-      color: platform?.color,
+    const newUserPlatform: UserPlatform = {
       user_id: user!.id,
-      platform_id: platform.platform_id,
-      platforms,
-      url,
+      platform_id: selectedPlatform.platform_id,
+      url: platformUrl,
     };
-    setUserPlatforms([...userPlatforms, newUserPlatform]);
-    setIsActive(false);
-    setPlatform(emptyUserPlatform);
-    seturl('');
+
+    setUserPlatforms((prevPlatforms) => [...prevPlatforms, newUserPlatform]);
+
+    setIsAddingPlatform(false);
+    setSelectedPlatform(emptyPlatform);
+    setPlatformUrl('');
+
     addUserPlatform(newUserPlatform);
-  }, [platform, url, userPlatforms, user, platforms]);
+  }, [user, selectedPlatform.platform_id, platformUrl]);
 
   const handleCancelAdd = useCallback(() => {
-    setIsActive(false);
+    setIsAddingPlatform(false);
   }, []);
 
-  if (loading) {
+  if (isLoadingUserPlatforms) {
     return <div>Loading...</div>;
   }
 
@@ -124,17 +127,29 @@ const CustomizeLinks = () => {
         </button>
       </div>
       <div className="added-platforms">
-        {!loading && Array.from({ length: 5 }).map((_, index) => (
-          <SmallPlatform
-            key={index}
-            userPlatform={data[index]}
-            index={index}
-            handleRemovePlatform={handleRemovePlatform}
-          />
-        ))}
+        {Array.from({ length: 5 }).map((_, index) => {
+          if (index < userPlatforms.length) {
+            // Render SmallPlatform with userPlatform data
+            return (
+              <SmallPlatform
+                key={index}
+                userPlatform={userPlatforms[index]}
+                index={index}
+                handleRemovePlatform={handleRemovePlatform}
+              />
+            );
+          } else {
+            // Render placeholder
+            return (
+              <div className="platform" key={index}>
+                {/* Render empty platform elements as placeholders */}
+              </div>
+            );
+          }
+        })}
       </div>
       <div className={`customize-body`}>
-        {isActive && (
+        {isAddingPlatform && (
           <form className="link-form">
             <div className="form-header">
               <h2>New Link</h2>
@@ -146,16 +161,16 @@ const CustomizeLinks = () => {
             <label>Platform</label>
             <Dropdown
               platforms={platforms}
-              selectedPlatform={platform}
-              onSelect={setPlatform}
+              selectedPlatform={selectedPlatform}
+              onSelect={setSelectedPlatform}
             />
             <label>Link</label>
             <input
               type="url"
               className="element-input"
               placeholder="e.g. https://www.github.com/johnappleseed"
-              value={url}
-              onChange={(e) => seturl(e.target.value)}
+              value={platformUrl}
+              onChange={(e) => setPlatformUrl(e.target.value)}
             />
           </form>
         )}
@@ -164,7 +179,7 @@ const CustomizeLinks = () => {
         <button
           className="button"
           onClick={handleSaveLink}
-          disabled={!isActive}
+          disabled={!isAddingPlatform}
         >
           Save
         </button>

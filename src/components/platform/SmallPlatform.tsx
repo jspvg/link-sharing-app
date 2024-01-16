@@ -1,7 +1,9 @@
-import { UserPlatformData } from '../../lib/types';
+import { useEffect, useState } from 'react';
+import { Platform, UserPlatform } from '../../lib/types';
+import { fetchPlatformData } from '../../lib/api/queries';
 
 type SmallPlatformProps = {
-  userPlatform: UserPlatformData;
+  userPlatform: UserPlatform;
   index: number;
   handleRemovePlatform: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -11,16 +13,41 @@ const SmallPlatform = ({
   index,
   handleRemovePlatform,
 }: SmallPlatformProps) => {
+  const [platform, setPlatform] = useState<Platform>();
 
-  return userPlatform ? (
+  useEffect(() => {
+    const getPlatformData = async () => {
+      if (!userPlatform) {
+        return;
+      }
+      try {
+        const platformData = await fetchPlatformData(userPlatform.platform_id);
+        setPlatform(platformData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getPlatformData();
+  }, [userPlatform]);
+
+  if (!platform) {
+    return (
+      <div className="platform" key={index}>
+        {/* Render empty platform elements as placeholders */}
+      </div>
+    );
+  }
+
+  return (
     <div
       className="platform"
       key={index}
-      style={{ backgroundColor: `${userPlatform.platforms.color}` }}
+      style={{ backgroundColor: `${platform!.color}` }}
     >
       <div>
-        <img src={userPlatform.platforms.logo_white} alt="" />
-        <p style={{ color: 'white' }}>{userPlatform.platforms.name}</p>
+        <img src={platform!.logo_white} alt="" />
+        <p style={{ color: 'white' }}>{platform!.name}</p>
       </div>
       <button
         data-index={index}
@@ -28,10 +55,6 @@ const SmallPlatform = ({
       >
         x
       </button>
-    </div>
-  ) : (
-    <div className="platform" key={index}>
-      {/* Render empty platform elements as placeholders */}
     </div>
   );
 };

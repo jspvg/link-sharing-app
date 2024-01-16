@@ -6,15 +6,12 @@ export type Platform = {
   color: string;
 };
 
-export type UserPlatform = Platform & {
+export type UserPlatform = {
   user_id: string;
   platform_id: string;
   url: string;
 };
 
-export type UserPlatformData = UserPlatform & {
-  platforms: Platform[];
-};
 
 export type Link = {
   id: string;
