@@ -1,30 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
-import useUser from '../hooks/useUser';
 import { UserPlatform } from '../lib/types';
 import '../styles/components/mockup.scss';
-import { fetchUserPlatforms } from '../lib/api/queries';
 import LargePlatform from './platform/LargePlatform';
 
-const MobileMockup = () => {
-  const { user } = useUser();
-
-  const [userPlatforms, setUserPlatforms] = useState<UserPlatform[]>([]);
-
-  const fetchAndSetUserPlatforms = useCallback(async () => {
-    if (user) {
-      try {
-        const fetchedUserPlatforms = await fetchUserPlatforms(user.id);
-        setUserPlatforms(fetchedUserPlatforms);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }, [user]);
-
-  useEffect(() => {
-    fetchAndSetUserPlatforms();
-  }, [fetchAndSetUserPlatforms]);
-
+const MobileMockup = ({ userPlatforms }: { userPlatforms: UserPlatform[] }) => {
+  if (!userPlatforms) {
+    return (
+      <div className="link-element" key={Math.random()}>
+        {/* Render empty link-element as placeholders */}
+      </div>
+    );
+  }
   return (
     <div className="outline">
       <div className="inline">

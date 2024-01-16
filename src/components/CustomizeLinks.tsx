@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Platform, UserPlatform } from '../lib/types';
-import { fetchPlatforms, fetchUserPlatforms } from '../lib/api/queries';
+import { fetchPlatforms } from '../lib/api/queries';
 import Dropdown from './elements/Dropdown';
 import useUser from '../hooks/useUser';
 import SmallPlatform from './platform/SmallPlatform';
@@ -16,10 +16,15 @@ const emptyPlatform = {
   url: '',
 };
 
-const CustomizeLinks = () => {
+const CustomizeLinks = ({
+  userPlatforms,
+  setUserPlatforms,
+}: {
+  userPlatforms: UserPlatform[];
+  setUserPlatforms: React.Dispatch<React.SetStateAction<UserPlatform[]>>;
+}) => {
   const { user } = useUser();
 
-  const [userPlatforms, setUserPlatforms] = useState<UserPlatform[]>([]);
   const [isLoadingUserPlatforms, setIsLoadingUserPlatforms] = useState(true);
 
   const [platforms, setPlatforms] = useState<Platform[]>([]);
@@ -29,18 +34,11 @@ const CustomizeLinks = () => {
 
   const [isAddingPlatform, setIsAddingPlatform] = useState(false);
 
-  const fetchAndSetUserPlatforms = useCallback(async () => {
-    if (user) {
-      try {
-        const fetchedUserPlatforms = await fetchUserPlatforms(user.id);
-        setUserPlatforms(fetchedUserPlatforms);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoadingUserPlatforms(false);
-      }
+  useEffect(() => {
+    if (userPlatforms) {
+      setIsLoadingUserPlatforms(false);
     }
-  }, [user]);
+  }, [userPlatforms]);
 
   const fetchAndSetPlatforms = useCallback(async () => {
     try {
@@ -52,9 +50,8 @@ const CustomizeLinks = () => {
   }, []);
 
   useEffect(() => {
-    fetchAndSetUserPlatforms();
     fetchAndSetPlatforms();
-  }, [fetchAndSetPlatforms, fetchAndSetUserPlatforms]);
+  }, [fetchAndSetPlatforms]);
 
   const handleRemovePlatform = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,7 +72,7 @@ const CustomizeLinks = () => {
         prevPlatforms.filter((_, i) => i !== index),
       );
     },
-    [userPlatforms],
+    [setUserPlatforms, userPlatforms],
   );
 
   const handleAddLink = useCallback(() => {
@@ -101,7 +98,7 @@ const CustomizeLinks = () => {
     setPlatformUrl('');
 
     addUserPlatform(newUserPlatform);
-  }, [user, selectedPlatform.platform_id, platformUrl]);
+  }, [user, selectedPlatform.platform_id, platformUrl, setUserPlatforms]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingPlatform(false);

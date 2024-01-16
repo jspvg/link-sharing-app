@@ -1,16 +1,21 @@
-import CustomizeLinks from "../components/CustomizeLinks";
-import MobileMockup from "../components/MobileMockup";
-import "../styles/components/forms.scss";
+import CustomizeLinks from '../components/CustomizeLinks';
+import MobileMockup from '../components/MobileMockup';
+import useUserPlatforms from '../hooks/useUserPlatforms';
 
 const Links = () => {
+  const { userPlatforms, setUserPlatforms } = useUserPlatforms();
+
   return (
     <div className="page-body">
       <div className="page-container">
         <div className="left">
-          <MobileMockup />
+          <MobileMockup userPlatforms={userPlatforms} />
         </div>
         <div className="right">
-          <CustomizeLinks />
+          <CustomizeLinks
+            userPlatforms={userPlatforms}
+            setUserPlatforms={setUserPlatforms}
+          />
         </div>
       </div>
     </div>
