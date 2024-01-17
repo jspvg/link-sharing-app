@@ -1,8 +1,21 @@
-import { UserPlatform } from '../lib/types';
+import { useEffect, useState } from 'react';
+import { UserDetails, UserPlatform } from '../lib/types';
 import '../styles/components/mockup.scss';
 import LargePlatform from './platform/LargePlatform';
+import useUser from '../hooks/useUser';
+import { fetchUserDetails } from '../lib/api/queries';
 
 const MobileMockup = ({ userPlatforms }: { userPlatforms: UserPlatform[] }) => {
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      const user_id = user!.id;
+      fetchUserDetails(user_id).then(setUserDetails).catch(console.error);
+    }
+  }, [user]);
+
   if (!userPlatforms) {
     return (
       <div className="link-element" key={Math.random()}>
@@ -14,7 +27,11 @@ const MobileMockup = ({ userPlatforms }: { userPlatforms: UserPlatform[] }) => {
     <div className="outline">
       <div className="inline">
         <div className="mobile-header">
-          <div className="circle"></div>
+          <div className="circle">
+            {userDetails?.picture && (
+              <img src={userDetails.picture} alt="Profile" />
+            )}
+          </div>
           <div className="name"></div>
           <div className="contact"></div>
         </div>

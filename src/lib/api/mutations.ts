@@ -28,3 +28,20 @@ export const deleteUserPlatform = async ({
 
   if (error) throw error;
 };
+
+export const addProfilePicture = async (user_id: string, picture: File) => {
+  const { error } = await supabase.storage
+    .from('profile_pictures')
+    .upload('public/' + user_id + '.png', picture, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+  if (error) throw error;
+  else {
+    const { error } = await supabase
+      .from('user_details')
+      .update({ profile_picture: 'public/' + user_id + '.png' })
+      .match({ user_id: user_id });
+    if (error) throw error;
+  }
+};

@@ -1,5 +1,5 @@
-@import "../placeholders.scss";
-@import "../colors.scss";
+@import '../placeholders.scss';
+@import '../colors.scss';
 
 %inputs {
   border: 1px solid $pale-gray;
@@ -50,36 +50,60 @@ label {
 .profile-label {
   @extend %flex-container;
   @extend %flex-row;
-  gap: 24px;
+  justify-content: space-evenly;
+
+  div {
+    @extend %flex-container;
+    @extend %flex-row;
+    gap: 12px;
+  }
 }
 
-input[type="text"],
+input[type='text'],
 .select-input {
   @extend %inputs;
 }
 
-input[type="email"],
-input[type="password"],
-input[type="url"] {
+input[type='email'],
+input[type='password'],
+input[type='url'] {
   @extend %inputs;
   background-repeat: no-repeat;
   padding-left: 40px;
   background-position: 5% center;
 }
 
-input[type="email"] {
-  background-image: url("./assets/envelope.svg");
+input[type='email'] {
+  background-image: url('./assets/envelope.svg');
 }
 
-input[type="password"] {
-  background-image: url("./assets/lock.svg");
+input[type='password'] {
+  background-image: url('./assets/lock.svg');
 }
 
-input[type="url"] {
-  background-image: url("./assets/link-gray.svg");
+input[type='url'] {
+  background-image: url('./assets/link-gray.svg');
   background-position: 1% center !important;
 }
 
 input:focus {
   box-shadow: 0px 0px 20px 0px $pale-teal;
+}
+
+.link-input {
+  width: 100%
+}
+
+form.link-input {
+  @extend %form-flex;
+  gap: 12px;
+  width: 100%;
+
+  p {
+    width: 30%;
+  }
+
+  .element-input {
+    width: 100%;
+  }
 }

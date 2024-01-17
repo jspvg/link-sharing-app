@@ -1,4 +1,4 @@
-import { Platform, UserPlatform } from '../types';
+import { Platform, UserDetails, UserPlatform } from '../types';
 import { supabase } from './supabase';
 
 export const fetchPlatforms = async () => {
@@ -27,5 +27,17 @@ export const fetchPlatformData = async (
     .limit(1)
     .eq('platform_id', platform_id);
   if (error) throw error;
+  return data[0];
+};
+
+export const fetchUserDetails = async (
+  user_id: string,
+): Promise<UserDetails> => {
+  const { data, error } = await supabase
+    .from('user_details')
+    .select('*')
+    .eq('user_id', user_id);
+  if (error) throw error;
+  if (data.length === 0) throw new Error('No user found with this user id');
   return data[0];
 };

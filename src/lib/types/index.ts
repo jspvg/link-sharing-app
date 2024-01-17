@@ -12,22 +12,9 @@ export type UserPlatform = {
   url: string;
 };
 
-
-export type Link = {
-  id: string;
-  platform: Platform;
-  link: string;
-};
-
-export type MainData = {
-  image: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-export type Profile = {
-  id: string;
-  userData: MainData;
-  userLinks: Link[];
+export type UserDetails = {
+  user_id: string;
+  f_name?: string;
+  l_name?: string;
+  picture?: string;
 };
