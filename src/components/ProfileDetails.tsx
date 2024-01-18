@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import useUser from '../hooks/useUser';
 import { addProfilePicture } from '../lib/api/mutations';
+import { UserDetails } from '../lib/types';
+import { fetchUserDetails } from '../lib/api/queries';
 
-const ProfileDetails = () => {
+const ProfileDetails = ({
+  setUserDetails,
+}: {
+  setUserDetails: React.Dispatch<React.SetStateAction<UserDetails | null>>;
+}) => {
   const { user } = useUser();
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
@@ -16,7 +22,10 @@ const ProfileDetails = () => {
   const handleSaveDetails = () => {
     console.log(picture);
     if (user && picture) {
-      addProfilePicture(user.id, picture);
+      addProfilePicture(user.id, picture)
+        .then(() => fetchUserDetails(user.id))
+        .then(setUserDetails)
+        .catch(console.error);
       setPicture(null);
     }
   };
