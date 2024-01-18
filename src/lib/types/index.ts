@@ -16,5 +16,5 @@ export type UserDetails = {
   user_id: string;
   f_name?: string;
   l_name?: string;
-  picture?: string;
+  profile_picture?: string;
 };

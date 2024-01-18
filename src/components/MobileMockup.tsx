@@ -11,7 +11,7 @@ const MobileMockup = ({ userPlatforms }: { userPlatforms: UserPlatform[] }) => {
 
   useEffect(() => {
     if (user) {
-      const user_id = user!.id;
+      const user_id = user.id;
       fetchUserDetails(user_id).then(setUserDetails).catch(console.error);
     }
   }, [user]);
@@ -28,8 +28,8 @@ const MobileMockup = ({ userPlatforms }: { userPlatforms: UserPlatform[] }) => {
       <div className="inline">
         <div className="mobile-header">
           <div className="circle">
-            {userDetails?.picture && (
-              <img src={userDetails.picture} alt="Profile" />
+            {userDetails?.profile_picture && (
+              <img className='profile-picture' src={userDetails.profile_picture} alt="Profile" />
             )}
           </div>
           <div className="name"></div>

@@ -1,11 +1,24 @@
+import { useState } from 'react';
 import useUser from '../hooks/useUser';
 import { addProfilePicture } from '../lib/api/mutations';
 
 const ProfileDetails = () => {
   const { user } = useUser();
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [email, setEmail] = useState('');
+  const [picture, setPicture] = useState<File | null>(null);
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const picture = event.target.files![0];
-    addProfilePicture(user!.id, picture);
+    const uploadedPicture = event.target.files![0];
+    setPicture(uploadedPicture);
+  };
+
+  const handleSaveDetails = () => {
+    console.log(picture);
+    if (user && picture) {
+      addProfilePicture(user.id, picture);
+      setPicture(null);
+    }
   };
 
   return (
@@ -20,10 +33,12 @@ const ProfileDetails = () => {
         <label className="profile-label">
           <p>Profile picture</p>
           <div>
-            <button className="nav-link active" onClick={() => handleAddImage}>
-              + Upload Image
-              <input type="file" onChange={handleAddImage} />
-            </button>
+            <input
+              className="nav-link active"
+              type="file"
+              onChange={(event) => handleAddImage(event)}
+            />
+
             <p>Image must be below 1024x1024px. Use PNG or JPG format.</p>
           </div>
         </label>
@@ -36,6 +51,8 @@ const ProfileDetails = () => {
               type="text"
               className="element-input"
               placeholder="e.g. John"
+              value={fname}
+              onChange={(event) => setFname(event.target.value)}
             />
           </label>
           <label className="profile-label">
@@ -44,6 +61,8 @@ const ProfileDetails = () => {
               type="text"
               className="element-input"
               placeholder="e.g. Appleseed"
+              value={lname}
+              onChange={(event) => setLname(event.target.value)}
             />
           </label>
           <label className="profile-label">
@@ -52,14 +71,17 @@ const ProfileDetails = () => {
               type="text"
               className="element-input"
               placeholder="e.g. email@example.com"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </label>
         </form>
       </div>
 
       <div className="save-button">
-        {/* TODO manage disabled state */}
-        <button className="button">Save</button>
+        <button className="button" onClick={handleSaveDetails}>
+          Save
+        </button>
       </div>
     </>
   );

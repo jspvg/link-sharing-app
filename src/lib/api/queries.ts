@@ -38,6 +38,6 @@ export const fetchUserDetails = async (
     .select('*')
     .eq('user_id', user_id);
   if (error) throw error;
-  if (data.length === 0) throw new Error('No user found with this user id');
+  if (data.length === 0 && !user_id) throw new Error('No user details found with this user id');
   return data[0];
 };

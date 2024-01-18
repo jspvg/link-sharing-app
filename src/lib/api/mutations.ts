@@ -30,18 +30,22 @@ export const deleteUserPlatform = async ({
 };
 
 export const addProfilePicture = async (user_id: string, picture: File) => {
-  const { error } = await supabase.storage
+  const filePath = 'public/' + user_id + '.png';
+  const { error: uploadError } = await supabase.storage
     .from('profile_pictures')
-    .upload('public/' + user_id + '.png', picture, {
+    .upload(filePath, picture, {
       cacheControl: '3600',
       upsert: false,
     });
-  if (error) throw error;
-  else {
-    const { error } = await supabase
-      .from('user_details')
-      .update({ profile_picture: 'public/' + user_id + '.png' })
-      .match({ user_id: user_id });
-    if (error) throw error;
-  }
+
+  if (uploadError) throw uploadError;
+
+  const referenceFilePath = `${
+    import.meta.env.VITE_SUPABASE_URL
+  }/storage/v1/object/public/profile_pictures/${filePath}`;
+  const { error: insertError } = await supabase
+    .from('user_details')
+    .insert([{ user_id: user_id, profile_picture: referenceFilePath }]);
+
+  if (insertError) throw insertError;
 };
