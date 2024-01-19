@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import MobileMockup from '../components/MobileMockup';
 import ProfileDetails from '../components/ProfileDetails';
-import useUser from '../hooks/useUser';
 import useUserPlatforms from '../hooks/useUserPlatforms';
 import { UserDetails } from '../lib/types';
 import { fetchUserDetails } from '../lib/api/queries';
+import { useUser } from '../providers/UserProvider';
 
 const Profile = () => {
   const { userPlatforms } = useUserPlatforms();
@@ -20,10 +20,13 @@ const Profile = () => {
     <div className="page-body">
       <div className="page-container">
         <div className="left">
-          <MobileMockup userPlatforms={userPlatforms} userDetails={userDetails}/>
+          <MobileMockup
+            userPlatforms={userPlatforms}
+            userDetails={userDetails}
+          />
         </div>
         <div className="right">
-          <ProfileDetails setUserDetails={setUserDetails}/>
+          <ProfileDetails setUserDetails={setUserDetails} />
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import useUser from './useUser';
 import { UserPlatform } from '../lib/types';
 import { fetchUserPlatforms } from '../lib/api/queries';
+import { useUser } from '../providers/UserProvider';
 
 const useUserPlatforms = () => {
   const { user } = useUser();
@@ -19,7 +19,7 @@ const useUserPlatforms = () => {
     }
   }, [user]);
 
-  return {userPlatforms, setUserPlatforms};
+  return { userPlatforms, setUserPlatforms };
 };
 
 export default useUserPlatforms;
