@@ -1,13 +1,24 @@
 import { NavLink } from 'react-router-dom';
 import MobileMockup from '../components/MobileMockup';
 import '../styles/components/preview.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Popup from '../components/elements/Popup';
 import useUserPlatforms from '../hooks/useUserPlatforms';
+import useUser from '../hooks/useUser';
+import { fetchUserDetails } from '../lib/api/queries';
+import { UserDetails } from '../lib/types';
 
 const Preview = () => {
+  const { user } = useUser();
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const { userPlatforms } = useUserPlatforms();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserDetails(user.id).then(setUserDetails).catch(console.error);
+    }
+  }, [user]);
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard
@@ -41,7 +52,10 @@ const Preview = () => {
         </nav>
 
         <div className="phone">
-          <MobileMockup userPlatforms={userPlatforms} />
+          <MobileMockup
+            userPlatforms={userPlatforms}
+            userDetails={userDetails}
+          />
         </div>
       </div>
       <div className="popup-div">
