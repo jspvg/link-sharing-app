@@ -1,8 +1,43 @@
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { addProfilePicture } from '../lib/api/mutations';
 import { UserDetails } from '../lib/types';
 import { fetchUserDetails } from '../lib/api/queries';
 import { useUser } from '../hooks/useUser';
+
+interface State {
+  fname: string;
+  lname: string;
+  email: string;
+  picture: File | null;
+}
+
+type Action =
+  | { type: 'setFname'; payload: string }
+  | { type: 'setLname'; payload: string }
+  | { type: 'setEmail'; payload: string }
+  | { type: 'setPicture'; payload: File | null };
+
+const initialState: State = {
+  fname: '',
+  lname: '',
+  email: '',
+  picture: null,
+};
+
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'setFname':
+      return { ...state, fname: action.payload };
+    case 'setLname':
+      return { ...state, lname: action.payload };
+    case 'setEmail':
+      return { ...state, email: action.payload };
+    case 'setPicture':
+      return { ...state, picture: action.payload };
+    default:
+      throw new Error();
+  }
+};
 
 const ProfileDetails = ({
   setUserDetails,
@@ -10,23 +45,20 @@ const ProfileDetails = ({
   setUserDetails: React.Dispatch<React.SetStateAction<UserDetails | null>>;
 }) => {
   const { user } = useUser();
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [email, setEmail] = useState('');
-  const [picture, setPicture] = useState<File | null>(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedPicture = event.target.files![0];
-    setPicture(uploadedPicture);
+    dispatch({ type: 'setPicture', payload: uploadedPicture });
   };
 
   const handleSaveDetails = () => {
-    console.log(picture);
-    if (user && picture) {
-      addProfilePicture(user.id, picture)
+    console.log(state.picture);
+    if (user && state.picture) {
+      addProfilePicture(user.id, state.picture)
         .then(() => fetchUserDetails(user.id))
         .then(setUserDetails)
         .catch(console.error);
-      setPicture(null);
+      dispatch({ type: 'setPicture', payload: null });
     }
   };
 
@@ -48,7 +80,7 @@ const ProfileDetails = ({
               onChange={(event) => handleAddImage(event)}
             />
 
-            <p>Image must be below 1024x1024px. Use PNG or JPG format.</p>
+            <p>Use PNG or JPG format.</p>
           </div>
         </label>
       </div>
@@ -60,8 +92,10 @@ const ProfileDetails = ({
               type="text"
               className="element-input"
               placeholder="e.g. John"
-              value={fname}
-              onChange={(event) => setFname(event.target.value)}
+              value={state.fname}
+              onChange={(event) =>
+                dispatch({ type: 'setFname', payload: event.target.value })
+              }
             />
           </label>
           <label className="profile-label">
@@ -70,8 +104,10 @@ const ProfileDetails = ({
               type="text"
               className="element-input"
               placeholder="e.g. Appleseed"
-              value={lname}
-              onChange={(event) => setLname(event.target.value)}
+              value={state.lname}
+              onChange={(event) =>
+                dispatch({ type: 'setLname', payload: event.target.value })
+              }
             />
           </label>
           <label className="profile-label">
@@ -80,8 +116,10 @@ const ProfileDetails = ({
               type="text"
               className="element-input"
               placeholder="e.g. email@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={state.email}
+              onChange={(event) =>
+                dispatch({ type: 'setEmail', payload: event.target.value })
+              }
             />
           </label>
         </form>
