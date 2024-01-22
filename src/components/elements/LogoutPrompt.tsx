@@ -5,20 +5,24 @@ import { useUser } from '../../hooks/useUser';
 
 const LogoutPrompt = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   useEffect(() => {
     if (user !== null) {
       const confirmLogout = window.confirm('Are you sure you want to log out?');
       if (confirmLogout) {
         supabase.auth.signOut().then(() => {
+          console.log('user cofirmed logout');
+          setUser(null);
           navigate('/register');
+          console.log('should be rerouted');
         });
       } else {
+        console.log('user denied logout');
         navigate('/landing');
       }
     }
-  }, [navigate, user]);
+  }, [navigate, user, setUser]);
 
   return null;
 };
