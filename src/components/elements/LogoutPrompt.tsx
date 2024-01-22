@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/api/supabase';
 import { useUser } from '../../hooks/useUser';
@@ -6,25 +6,41 @@ import { useUser } from '../../hooks/useUser';
 const LogoutPrompt = () => {
   const navigate = useNavigate();
   const { user, setUser } = useUser();
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
+
+  const handleConfirmLogout = () => {
+    supabase.auth.signOut().then(() => {
+      console.log('user confirmed logout');
+      setUser(null);
+      navigate('/register');
+      console.log('should be rerouted');
+    });
+  };
+
+  const handleDenyLogout = () => {
+    console.log('user denied logout');
+    navigate('/landing');
+  };
 
   useEffect(() => {
     if (user !== null) {
-      const confirmLogout = window.confirm('Are you sure you want to log out?');
-      if (confirmLogout) {
-        supabase.auth.signOut().then(() => {
-          console.log('user cofirmed logout');
-          setUser(null);
-          navigate('/register');
-          console.log('should be rerouted');
-        });
-      } else {
-        console.log('user denied logout');
-        navigate('/landing');
-      }
+      setShowConfirmLogout(true);
     }
-  }, [navigate, user, setUser]);
+  }, [user]);
 
-  return null;
+  return (
+    <>
+      {showConfirmLogout && (
+        <section>
+          <div className="logout-prompt">
+            <p>Are you sure you want to log out?</p>
+            <button className='button' onClick={handleConfirmLogout}>Yes</button>
+            <button className='button'onClick={handleDenyLogout}>No</button>
+          </div>
+        </section>
+      )}
+    </>
+  );
 };
 
 export default LogoutPrompt;
