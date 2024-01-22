@@ -4,7 +4,7 @@ import ProfileDetails from '../components/ProfileDetails';
 import useUserPlatforms from '../hooks/useUserPlatforms';
 import { UserDetails } from '../lib/types';
 import { fetchUserDetails } from '../lib/api/queries';
-import { useUser } from '../providers/UserProvider';
+import { useUser } from '../hooks/useUser';
 
 const Profile = () => {
   const { userPlatforms } = useUserPlatforms();

@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/api/supabase';
 import { useState } from 'react';
 import Popup from '../components/elements/Popup';
+import { useUser } from '../hooks/useUser';
 
 type LoginForm = z.infer<typeof baseLoginSchema>;
 
 const Login = () => {
+  const { setUser } = useUser();
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -27,7 +29,7 @@ const Login = () => {
   const loginUser = async (data: LoginForm) => {
     const { email, password } = data;
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data: userData } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -37,6 +39,7 @@ const Login = () => {
       setErrorMessage(error.message);
       setTimeout(() => setIsError(false), 7000);
     } else {
+      setUser(userData.user);
       navigate('/');
     }
   };

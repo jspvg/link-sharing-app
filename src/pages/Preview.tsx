@@ -6,7 +6,7 @@ import Popup from '../components/elements/Popup';
 import useUserPlatforms from '../hooks/useUserPlatforms';
 import { fetchUserDetails } from '../lib/api/queries';
 import { UserDetails } from '../lib/types';
-import { useUser } from '../providers/UserProvider';
+import { useUser } from '../hooks/useUser';
 
 const Preview = () => {
   const { user } = useUser();

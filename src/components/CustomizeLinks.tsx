@@ -5,7 +5,7 @@ import SmallPlatform from './platform/SmallPlatform';
 import { addUserPlatform, deleteUserPlatform } from '../lib/api/mutations';
 import '../styles/components/customize.scss';
 import usePlatforms from '../hooks/usePlatforms';
-import { useUser } from '../providers/UserProvider';
+import { useUser } from '../hooks/useUser';
 
 const emptyPlatform = {
   platform_id: '',

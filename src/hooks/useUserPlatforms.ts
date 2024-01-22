@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserPlatform } from '../lib/types';
 import { fetchUserPlatforms } from '../lib/api/queries';
-import { useUser } from '../providers/UserProvider';
+import { useUser } from './useUser';
 
 const useUserPlatforms = () => {
   const { user } = useUser();

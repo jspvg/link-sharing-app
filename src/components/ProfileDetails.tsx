@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { addProfilePicture } from '../lib/api/mutations';
 import { UserDetails } from '../lib/types';
 import { fetchUserDetails } from '../lib/api/queries';
-import { useUser } from '../providers/UserProvider';
+import { useUser } from '../hooks/useUser';
 
 const ProfileDetails = ({
   setUserDetails,

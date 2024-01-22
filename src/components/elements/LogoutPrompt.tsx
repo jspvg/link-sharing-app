@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/api/supabase';
-import { useUser } from '../../providers/UserProvider';
+import { useUser } from '../../hooks/useUser';
 
 const LogoutPrompt = () => {
   const navigate = useNavigate();
