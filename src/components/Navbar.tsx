@@ -2,8 +2,10 @@ import { NavLink, useMatch, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import '../styles/components/navigation.scss';
 import { supabase } from '../lib/api/supabase';
+import { useUser } from '../hooks/useUser';
 
 const Navbar = () => {
+  const { setUser } = useUser();
   const homeMatch = useMatch('/');
   const profileMatch = useMatch('/profile');
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const Navbar = () => {
     if (error) {
       console.log('Error logging out:', error.message);
     } else {
+      setUser(null);
       navigate('/login');
     }
   };
@@ -46,7 +49,7 @@ const Navbar = () => {
             Profile Details
           </NavLink>
         </div>
-        <div className='nav-div'>
+        <div className="nav-div">
           <NavLink className="nav-link nav-preview" to="/preview">
             Preview
           </NavLink>

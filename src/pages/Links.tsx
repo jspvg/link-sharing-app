@@ -4,7 +4,7 @@ import MobileMockup from '../components/MobileMockup';
 import useUserPlatforms from '../hooks/useUserPlatforms';
 import { fetchUserDetails } from '../lib/api/queries';
 import { UserDetails } from '../lib/types';
-import useUser from '../hooks/useUser';
+import { useUser } from '../hooks/useUser';
 
 const Links = () => {
   const { user } = useUser();

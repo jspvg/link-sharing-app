@@ -4,9 +4,9 @@ import '../styles/components/preview.scss';
 import { useEffect, useState } from 'react';
 import Popup from '../components/elements/Popup';
 import useUserPlatforms from '../hooks/useUserPlatforms';
-import useUser from '../hooks/useUser';
 import { fetchUserDetails } from '../lib/api/queries';
 import { UserDetails } from '../lib/types';
+import { useUser } from '../hooks/useUser';
 
 const Preview = () => {
   const { user } = useUser();
