@@ -1,8 +1,8 @@
 import { useReducer } from 'react';
-import { addProfilePicture } from '../lib/api/mutations';
+import { upsertUserDetails } from '../lib/api/mutations';
 import { UserDetails } from '../lib/types';
-import { fetchUserDetails } from '../lib/api/queries';
 import { useUser } from '../hooks/useUser';
+import { fetchUserDetails } from '../lib/api/queries';
 
 interface State {
   fname: string;
@@ -46,19 +46,30 @@ const ProfileDetails = ({
 }) => {
   const { user } = useUser();
   const [state, dispatch] = useReducer(reducer, initialState);
+
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedPicture = event.target.files![0];
     dispatch({ type: 'setPicture', payload: uploadedPicture });
   };
 
-  const handleSaveDetails = () => {
-    console.log(state.picture);
-    if (user && state.picture) {
-      addProfilePicture(user.id, state.picture)
-        .then(() => fetchUserDetails(user.id))
-        .then(setUserDetails)
-        .catch(console.error);
-      dispatch({ type: 'setPicture', payload: null });
+  const handleSaveDetails = async () => {
+    if (user) {
+      try {
+        await upsertUserDetails(
+          user.id,
+          {
+            f_name: state.fname,
+            l_name: state.lname,
+            email: state.email,
+          },
+          state.picture,
+        );
+        const userDetails = await fetchUserDetails(user.id);
+        console.log(userDetails);
+        setUserDetails(userDetails);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -87,7 +98,7 @@ const ProfileDetails = ({
       <div className="customize-body">
         <form className="link-input">
           <label className="profile-label">
-            <p>First name*</p>
+            <p>First name</p>
             <input
               type="text"
               className="element-input"
@@ -99,7 +110,7 @@ const ProfileDetails = ({
             />
           </label>
           <label className="profile-label">
-            <p>Last name*</p>
+            <p>Last name</p>
             <input
               type="text"
               className="element-input"
@@ -115,8 +126,8 @@ const ProfileDetails = ({
             <input
               type="text"
               className="element-input"
-              placeholder="e.g. email@example.com"
-              value={state.email}
+              placeholder={user?.email}
+              value={state.email ?? 'e.g. johnappleseed.provider.com'}
               onChange={(event) =>
                 dispatch({ type: 'setEmail', payload: event.target.value })
               }

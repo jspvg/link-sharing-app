@@ -17,4 +17,5 @@ export type UserDetails = {
   f_name?: string;
   l_name?: string;
   profile_picture?: string;
+  email?: string;
 };
