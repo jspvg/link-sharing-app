@@ -54,7 +54,12 @@ const Preview = () => {
         <div className="phone">
           <MobileMockup
             userPlatforms={userPlatforms}
-            userDetails={userDetails}
+            userDetails={
+              userDetails && {
+                ...userDetails,
+                profile_picture: `${userDetails!.profile_picture}?${Date.now()}`,
+              }
+            }
           />
         </div>
       </div>

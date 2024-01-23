@@ -15,7 +15,8 @@ type Action =
   | { type: 'setFname'; payload: string }
   | { type: 'setLname'; payload: string }
   | { type: 'setEmail'; payload: string }
-  | { type: 'setPicture'; payload: File | null };
+  | { type: 'setPicture'; payload: File | null }
+  | { type: 'clearState' };
 
 const initialState: State = {
   fname: '',
@@ -34,6 +35,8 @@ const reducer = (state: State, action: Action) => {
       return { ...state, email: action.payload };
     case 'setPicture':
       return { ...state, picture: action.payload };
+    case 'clearState':
+      return initialState;
     default:
       throw new Error();
   }
@@ -55,18 +58,19 @@ const ProfileDetails = ({
   const handleSaveDetails = async () => {
     if (user) {
       try {
-        await upsertUserDetails(
-          user.id,
-          {
-            f_name: state.fname,
-            l_name: state.lname,
-            email: state.email,
-          },
-          state.picture,
-        );
+        const currentUserDetails = await fetchUserDetails(user.id);
+
+        const updatesUserDetails = {
+          ...currentUserDetails,
+          f_name: state.fname || currentUserDetails.f_name,
+          l_name: state.lname || currentUserDetails.l_name,
+          email: state.email || currentUserDetails.email,
+        };
+
+        await upsertUserDetails(user.id, updatesUserDetails, state.picture);
         const userDetails = await fetchUserDetails(user.id);
-        console.log(userDetails);
         setUserDetails(userDetails);
+        dispatch({ type: 'clearState' });
       } catch (error) {
         console.error(error);
       }
