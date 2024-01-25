@@ -1,32 +1,36 @@
-import { useState } from 'react';
-import { addProfilePicture } from '../lib/api/mutations';
-import { UserDetails } from '../lib/types';
-import { fetchUserDetails } from '../lib/api/queries';
+import { upsertUserDetails } from '../lib/api/mutations';
 import { useUser } from '../hooks/useUser';
+import { fetchUserDetails } from '../lib/api/queries';
+import { useUserDetails } from '../hooks/useUserDetails';
 
-const ProfileDetails = ({
-  setUserDetails,
-}: {
-  setUserDetails: React.Dispatch<React.SetStateAction<UserDetails | null>>;
-}) => {
+const ProfileDetails = () => {
   const { user } = useUser();
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [email, setEmail] = useState('');
-  const [picture, setPicture] = useState<File | null>(null);
+  const { setUserDetails, state, dispatch } = useUserDetails();
+
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedPicture = event.target.files![0];
-    setPicture(uploadedPicture);
+    dispatch({ type: 'setPicture', payload: uploadedPicture });
   };
 
-  const handleSaveDetails = () => {
-    console.log(picture);
-    if (user && picture) {
-      addProfilePicture(user.id, picture)
-        .then(() => fetchUserDetails(user.id))
-        .then(setUserDetails)
-        .catch(console.error);
-      setPicture(null);
+  const handleSaveDetails = async () => {
+    if (user) {
+      try {
+        const currentUserDetails = await fetchUserDetails(user.id);
+
+        const updatesUserDetails = {
+          ...currentUserDetails,
+          f_name: state.fname || currentUserDetails.f_name,
+          l_name: state.lname || currentUserDetails.l_name,
+          email: state.email || currentUserDetails.email,
+        };
+
+        await upsertUserDetails(user.id, updatesUserDetails, state.picture);
+        const userDetails = await fetchUserDetails(user.id);
+        setUserDetails(userDetails);
+        dispatch({ type: 'clearState' });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -48,30 +52,34 @@ const ProfileDetails = ({
               onChange={(event) => handleAddImage(event)}
             />
 
-            <p>Image must be below 1024x1024px. Use PNG or JPG format.</p>
+            <p>Use PNG or JPG format.</p>
           </div>
         </label>
       </div>
       <div className="customize-body">
         <form className="link-input">
           <label className="profile-label">
-            <p>First name*</p>
+            <p>First name</p>
             <input
               type="text"
               className="element-input"
               placeholder="e.g. John"
-              value={fname}
-              onChange={(event) => setFname(event.target.value)}
+              value={state.fname}
+              onChange={(event) =>
+                dispatch({ type: 'setFname', payload: event.target.value })
+              }
             />
           </label>
           <label className="profile-label">
-            <p>Last name*</p>
+            <p>Last name</p>
             <input
               type="text"
               className="element-input"
               placeholder="e.g. Appleseed"
-              value={lname}
-              onChange={(event) => setLname(event.target.value)}
+              value={state.lname}
+              onChange={(event) =>
+                dispatch({ type: 'setLname', payload: event.target.value })
+              }
             />
           </label>
           <label className="profile-label">
@@ -79,9 +87,11 @@ const ProfileDetails = ({
             <input
               type="text"
               className="element-input"
-              placeholder="e.g. email@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              placeholder={user?.email}
+              value={state.email ?? 'e.g. johnappleseed.provider.com'}
+              onChange={(event) =>
+                dispatch({ type: 'setEmail', payload: event.target.value })
+              }
             />
           </label>
         </form>

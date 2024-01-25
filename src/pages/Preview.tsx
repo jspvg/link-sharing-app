@@ -3,22 +3,20 @@ import MobileMockup from '../components/MobileMockup';
 import '../styles/components/preview.scss';
 import { useEffect, useState } from 'react';
 import Popup from '../components/elements/Popup';
-import useUserPlatforms from '../hooks/useUserPlatforms';
 import { fetchUserDetails } from '../lib/api/queries';
-import { UserDetails } from '../lib/types';
 import { useUser } from '../hooks/useUser';
+import { useUserDetails } from '../hooks/useUserDetails';
 
 const Preview = () => {
   const { user } = useUser();
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const { setUserDetails } = useUserDetails();
   const [isCopied, setIsCopied] = useState(false);
-  const { userPlatforms } = useUserPlatforms();
 
   useEffect(() => {
     if (user) {
       fetchUserDetails(user.id).then(setUserDetails).catch(console.error);
     }
-  }, [user]);
+  }, [setUserDetails, user]);
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard
@@ -52,10 +50,7 @@ const Preview = () => {
         </nav>
 
         <div className="phone">
-          <MobileMockup
-            userPlatforms={userPlatforms}
-            userDetails={userDetails}
-          />
+          <MobileMockup />
         </div>
       </div>
       <div className="popup-div">

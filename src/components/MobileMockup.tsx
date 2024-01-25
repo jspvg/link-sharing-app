@@ -1,14 +1,11 @@
-import { UserDetails, UserPlatform } from '../lib/types';
+import { useUser } from '../hooks/useUser';
+import { useUserDetails } from '../hooks/useUserDetails';
 import '../styles/components/mockup.scss';
 import LargePlatform from './platform/LargePlatform';
 
-const MobileMockup = ({
-  userPlatforms,
-  userDetails,
-}: {
-  userPlatforms: UserPlatform[];
-  userDetails: UserDetails | null;
-}) => {
+const MobileMockup = () => {
+  const { user } = useUser();
+  const { userPlatforms, userDetails } = useUserDetails();
   if (!userPlatforms) {
     return (
       <div className="link-element" key={Math.random()}>
@@ -29,8 +26,18 @@ const MobileMockup = ({
               />
             )}
           </div>
-          <div className="name"></div>
-          <div className="contact"></div>
+          {userDetails?.f_name && userDetails.l_name ? (
+            <p>
+              {userDetails.f_name} {userDetails.l_name}
+            </p>
+          ) : (
+            <div className="name"></div>
+          )}
+          {userDetails?.email || user?.email ? (
+            <p>{userDetails?.email ?? user?.email}</p>
+          ) : (
+            <div className="contact"></div>
+          )}
         </div>
         <div className="mobile-content">
           {Array.from({ length: 5 }).map((_, index) => {
