@@ -1,54 +1,11 @@
-import { useReducer } from 'react';
 import { upsertUserDetails } from '../lib/api/mutations';
-import { UserDetails } from '../lib/types';
 import { useUser } from '../hooks/useUser';
 import { fetchUserDetails } from '../lib/api/queries';
+import { useUserDetails } from '../hooks/useUserDetails';
 
-interface State {
-  fname: string;
-  lname: string;
-  email: string;
-  picture: File | null;
-}
-
-type Action =
-  | { type: 'setFname'; payload: string }
-  | { type: 'setLname'; payload: string }
-  | { type: 'setEmail'; payload: string }
-  | { type: 'setPicture'; payload: File | null }
-  | { type: 'clearState' };
-
-const initialState: State = {
-  fname: '',
-  lname: '',
-  email: '',
-  picture: null,
-};
-
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'setFname':
-      return { ...state, fname: action.payload };
-    case 'setLname':
-      return { ...state, lname: action.payload };
-    case 'setEmail':
-      return { ...state, email: action.payload };
-    case 'setPicture':
-      return { ...state, picture: action.payload };
-    case 'clearState':
-      return initialState;
-    default:
-      throw new Error();
-  }
-};
-
-const ProfileDetails = ({
-  setUserDetails,
-}: {
-  setUserDetails: React.Dispatch<React.SetStateAction<UserDetails | null>>;
-}) => {
+const ProfileDetails = () => {
   const { user } = useUser();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { setUserDetails, state, dispatch } = useUserDetails();
 
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedPicture = event.target.files![0];

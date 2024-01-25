@@ -1,16 +1,11 @@
 import { useUser } from '../hooks/useUser';
-import { UserDetails, UserPlatform } from '../lib/types';
+import { useUserDetails } from '../hooks/useUserDetails';
 import '../styles/components/mockup.scss';
 import LargePlatform from './platform/LargePlatform';
 
-const MobileMockup = ({
-  userPlatforms,
-  userDetails,
-}: {
-  userPlatforms: UserPlatform[];
-  userDetails: UserDetails | null;
-}) => {
+const MobileMockup = () => {
   const { user } = useUser();
+  const { userPlatforms, userDetails } = useUserDetails();
   if (!userPlatforms) {
     return (
       <div className="link-element" key={Math.random()}>
