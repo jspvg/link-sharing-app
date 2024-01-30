@@ -60,12 +60,23 @@ export const upsertUserDetails = async (
   }
 
   const data = picture ? { ...userDetails, profile_picture } : userDetails;
-  const { error: updateError } = await supabase
-    .from('user_details')
-    .update(data)
-    .eq('user_id', user_id);
 
-  if (updateError) {
+  const { data: existingUserDetails, error: fetchError } = await supabase
+    .from('user_details')
+    .select('user_id')
+    .eq('user_id', user_id)
+    .maybeSingle();
+
+  if (fetchError) throw fetchError;
+
+  if (existingUserDetails) {
+    const { error: updateError } = await supabase
+      .from('user_details')
+      .update(data)
+      .eq('user_id', user_id);
+
+    if (updateError) throw updateError;
+  } else {
     const { error: insertError } = await supabase
       .from('user_details')
       .insert([{ user_id, ...data }]);

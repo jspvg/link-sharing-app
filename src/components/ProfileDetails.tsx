@@ -15,16 +15,16 @@ const ProfileDetails = () => {
   const handleSaveDetails = async () => {
     if (user) {
       try {
-        const currentUserDetails = await fetchUserDetails(user.id);
+        const currentUserDetails = (await fetchUserDetails(user.id)) || {};
 
-        const updatesUserDetails = {
+        const updatedUserDetails = {
           ...currentUserDetails,
-          f_name: state.fname || currentUserDetails.f_name,
-          l_name: state.lname || currentUserDetails.l_name,
-          email: state.email || currentUserDetails.email,
+          f_name: state.fname || currentUserDetails.f_name || '',
+          l_name: state.lname || currentUserDetails.l_name || '',
+          email: state.email || currentUserDetails.email || '',
         };
 
-        await upsertUserDetails(user.id, updatesUserDetails, state.picture);
+        await upsertUserDetails(user.id, updatedUserDetails, state.picture);
         const userDetails = await fetchUserDetails(user.id);
         setUserDetails(userDetails);
         dispatch({ type: 'clearState' });
