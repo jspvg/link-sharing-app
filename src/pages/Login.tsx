@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import Logo from '../components/Logo';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { baseLoginSchema } from '../lib/validation/validationSchemas';
+import { baseLoginSchema } from '../lib/validation/loginSchema';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/api/supabase';

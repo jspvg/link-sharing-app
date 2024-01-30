@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Platform, UserPlatform } from '../lib/types';
+import { UserPlatform } from '../lib/types';
 import Dropdown from './elements/Dropdown';
 import SmallPlatform from './platform/SmallPlatform';
-import { addUserPlatform, deleteUserPlatform } from '../lib/api/mutations';
 import '../styles/components/customize.scss';
 import usePlatforms from '../hooks/usePlatforms';
 import { useUser } from '../hooks/useUser';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormSchema } from '../lib/validation/customizeLinksSchemas';
+import {
+  FormData,
+  removeUserPlatform,
+  saveUserPlatform,
+} from '../lib/api/apiCalls/customizeLinksAPI';
 
 const emptyPlatform = {
   platform_id: '',
@@ -28,9 +35,6 @@ const CustomizeLinks = ({
   const [isLoadingUserPlatforms, setIsLoadingUserPlatforms] = useState(true);
 
   const platforms = usePlatforms();
-  const [selectedPlatform, setSelectedPlatform] =
-    useState<Platform>(emptyPlatform);
-  const [platformUrl, setPlatformUrl] = useState('');
 
   const [isAddingPlatform, setIsAddingPlatform] = useState(false);
 
@@ -40,24 +44,20 @@ const CustomizeLinks = ({
     }
   }, [userPlatforms]);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
+    resolver: zodResolver(FormSchema),
+    mode: 'onBlur',
+  });
+
   const handleRemovePlatform = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       const index = Number(event.currentTarget.getAttribute('data-index'));
-      const platformToRemove = userPlatforms[index];
-
-      try {
-        await deleteUserPlatform({
-          user_id: platformToRemove.user_id,
-          platform_id: platformToRemove.platform_id,
-        });
-      } catch (error) {
-        console.error('Failed to delete platform:', error);
-        return;
-      }
-
-      setUserPlatforms((prevPlatforms) =>
-        prevPlatforms.filter((_, i) => i !== index),
-      );
+      removeUserPlatform(userPlatforms, index, setUserPlatforms);
     },
     [setUserPlatforms, userPlatforms],
   );
@@ -72,20 +72,11 @@ const CustomizeLinks = ({
   }, [userPlatforms]);
 
   const handleSaveLink = useCallback(() => {
-    const newUserPlatform: UserPlatform = {
-      user_id: user!.id,
-      platform_id: selectedPlatform.platform_id,
-      url: platformUrl,
-    };
-
-    setUserPlatforms((prevPlatforms) => [...prevPlatforms, newUserPlatform]);
-
-    setIsAddingPlatform(false);
-    setSelectedPlatform(emptyPlatform);
-    setPlatformUrl('');
-
-    addUserPlatform(newUserPlatform);
-  }, [user, selectedPlatform.platform_id, platformUrl, setUserPlatforms]);
+    handleSubmit((data) => {
+      saveUserPlatform(data as FormData, user, setUserPlatforms);
+      setIsAddingPlatform(false);
+    })();
+  }, [handleSubmit, user, setUserPlatforms]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingPlatform(false);
@@ -141,19 +132,34 @@ const CustomizeLinks = ({
             </div>
 
             <label>Platform</label>
-            <Dropdown
-              platforms={platforms}
-              selectedPlatform={selectedPlatform}
-              onSelect={setSelectedPlatform}
+            <Controller
+              name="selectedPlatform"
+              control={control}
+              defaultValue={emptyPlatform}
+              render={({ field }) => (
+                <Dropdown
+                  platforms={platforms}
+                  selectedPlatform={field.value}
+                  onSelect={field.onChange}
+                />
+              )}
             />
+
+            {errors.selectedPlatform?.message && (
+              <p className="error">
+                {errors.selectedPlatform.message as string}
+              </p>
+            )}
             <label>Link</label>
             <input
               type="url"
               className="element-input"
               placeholder="e.g. https://www.github.com/johnappleseed"
-              value={platformUrl}
-              onChange={(e) => setPlatformUrl(e.target.value)}
+              {...register('platformUrl')}
             />
+            {errors.platformUrl?.message && (
+              <p className="error">{errors.platformUrl.message as string}</p>
+            )}
           </form>
         )}
       </div>
