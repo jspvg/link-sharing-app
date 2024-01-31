@@ -35,7 +35,10 @@ const LargePlatform = ({ userPlatform, index }: LargePlatformProps) => {
   }
 
   return (
-    <div
+    <a
+      href={userPlatform.url}
+      target="_blank"
+      rel="noopener noreferrer"
       className="link-element"
       key={index}
       style={{ backgroundColor: `${platform.color}` }}
@@ -44,7 +47,7 @@ const LargePlatform = ({ userPlatform, index }: LargePlatformProps) => {
         <img src={`${platform.logo_white}`} alt="" />
         <p style={{ color: 'white' }}>{platform.name}</p>
       </div>
-    </div>
+    </a>
   );
 };
 

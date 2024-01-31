@@ -5,7 +5,7 @@ import { supabase } from '../lib/api/supabase';
 import { useUser } from '../hooks/useUser';
 
 const Navbar = () => {
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const homeMatch = useMatch('/');
   const profileMatch = useMatch('/profile');
   const navigate = useNavigate();
@@ -50,9 +50,15 @@ const Navbar = () => {
           </NavLink>
         </div>
         <div className="nav-div">
-          <NavLink className="nav-link nav-preview" to="/preview">
-            Preview
-          </NavLink>
+          {user && (
+            <NavLink
+              className="nav-link nav-preview"
+              to={`/preview/${user!.id}`}
+            >
+              Preview
+            </NavLink>
+          )}
+
           <button
             className="nav-link nav-preview"
             style={{ height: '75%' }}
