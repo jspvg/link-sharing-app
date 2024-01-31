@@ -21,8 +21,9 @@ const MobileMockup = () => {
             {userDetails?.profile_picture && (
               <img
                 className="profile-picture"
-                src={userDetails.profile_picture}
+                src={`${userDetails.profile_picture}?${Date.now()}`}
                 alt="Profile"
+                key={userDetails?.profile_picture}
               />
             )}
           </div>

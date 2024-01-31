@@ -12,34 +12,19 @@ import { useUser } from '../hooks/useUser';
 import { fetchUserDetails, fetchUserPlatforms } from '../lib/api/queries';
 
 type State = {
-  fname: string;
-  lname: string;
-  email: string;
   picture: File | null;
 };
 
 type Action =
-  | { type: 'setFname'; payload: string }
-  | { type: 'setLname'; payload: string }
-  | { type: 'setEmail'; payload: string }
   | { type: 'setPicture'; payload: File | null }
   | { type: 'clearState' };
 
 const initialState: State = {
-  fname: '',
-  lname: '',
-  email: '',
   picture: null,
 };
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'setFname':
-      return { ...state, fname: action.payload };
-    case 'setLname':
-      return { ...state, lname: action.payload };
-    case 'setEmail':
-      return { ...state, email: action.payload };
     case 'setPicture':
       return { ...state, picture: action.payload };
     case 'clearState':
@@ -58,9 +43,9 @@ type UserDetailsContextType = {
   dispatch: React.Dispatch<Action>;
 };
 
-export const UserDetailsContext = createContext<UserDetailsContextType | undefined>(
-  undefined,
-);
+export const UserDetailsContext = createContext<
+  UserDetailsContextType | undefined
+>(undefined);
 
 export const UserDetailsProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();

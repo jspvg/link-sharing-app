@@ -2,37 +2,74 @@ import { upsertUserDetails } from '../lib/api/mutations';
 import { useUser } from '../hooks/useUser';
 import { fetchUserDetails } from '../lib/api/queries';
 import { useUserDetails } from '../hooks/useUserDetails';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormSchema } from '../lib/validation/profileDetailsSchema';
+
+const FileType = ['image/jpeg', 'image/jpg', 'image/png'];
 
 const ProfileDetails = () => {
   const { user } = useUser();
   const { setUserDetails, state, dispatch } = useUserDetails();
+  const [wrongTypeError, setWrongTypeError] = useState('');
 
-  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedPicture = event.target.files![0];
-    dispatch({ type: 'setPicture', payload: uploadedPicture });
+  const defaultFormValues = {
+    fname: '',
+    lname: '',
+    email: '',
   };
 
-  const handleSaveDetails = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(FormSchema),
+    mode: 'onBlur',
+    defaultValues: defaultFormValues,
+  });
+
+  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const uploadedPicture = event.target.files[0];
+      const fileType = uploadedPicture.type;
+
+      if (!Object.values(FileType).includes(fileType)) {
+        setWrongTypeError('Please upload a PNG, JPG, or JPEG file');
+        dispatch({ type: 'setPicture', payload: null });
+        return;
+      }
+
+      setWrongTypeError('');
+      dispatch({ type: 'setPicture', payload: uploadedPicture });
+    }
+  };
+
+  const handleSaveDetails = handleSubmit(async (data) => {
     if (user) {
       try {
         const currentUserDetails = (await fetchUserDetails(user.id)) || {};
 
         const updatedUserDetails = {
           ...currentUserDetails,
-          f_name: state.fname || currentUserDetails.f_name || '',
-          l_name: state.lname || currentUserDetails.l_name || '',
-          email: state.email || currentUserDetails.email || '',
+          f_name: data.fname || currentUserDetails.f_name || '',
+          l_name: data.lname || currentUserDetails.l_name || '',
+          email: data.email || currentUserDetails.email || '',
         };
 
         await upsertUserDetails(user.id, updatedUserDetails, state.picture);
         const userDetails = await fetchUserDetails(user.id);
         setUserDetails(userDetails);
         dispatch({ type: 'clearState' });
+
+        reset(defaultFormValues);
       } catch (error) {
         console.error(error);
       }
     }
-  };
+  });
 
   return (
     <>
@@ -55,6 +92,7 @@ const ProfileDetails = () => {
             <p>Use PNG or JPG format.</p>
           </div>
         </label>
+        {wrongTypeError && <p className="error">{wrongTypeError}</p>}
       </div>
       <div className="customize-body">
         <form className="link-input">
@@ -64,36 +102,36 @@ const ProfileDetails = () => {
               type="text"
               className="element-input"
               placeholder="e.g. John"
-              value={state.fname}
-              onChange={(event) =>
-                dispatch({ type: 'setFname', payload: event.target.value })
-              }
+              {...register('fname')}
             />
           </label>
+          {errors.fname?.message && (
+            <p className="error">{errors.fname.message as string}</p>
+          )}
           <label className="profile-label">
             <p>Last name</p>
             <input
               type="text"
               className="element-input"
               placeholder="e.g. Appleseed"
-              value={state.lname}
-              onChange={(event) =>
-                dispatch({ type: 'setLname', payload: event.target.value })
-              }
+              {...register('lname')}
             />
           </label>
+          {errors.lname?.message && (
+            <p className="error">{errors.lname.message as string}</p>
+          )}
           <label className="profile-label">
             <p>Email</p>
             <input
               type="text"
               className="element-input"
               placeholder={user?.email}
-              value={state.email ?? 'e.g. johnappleseed.provider.com'}
-              onChange={(event) =>
-                dispatch({ type: 'setEmail', payload: event.target.value })
-              }
+              {...register('email')}
             />
           </label>
+          {errors.email?.message && (
+            <p className="error">{errors.email.message as string}</p>
+          )}
         </form>
       </div>
 
