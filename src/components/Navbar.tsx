@@ -29,8 +29,8 @@ const Navbar = () => {
             <img
               src={
                 homeMatch
-                  ? './src/assets/link-teal.svg'
-                  : './src/assets/link-gray.svg'
+                  ? 'public/link-teal.svg'
+                  : 'public/link-gray.svg'
               }
             />
             Links
@@ -42,8 +42,8 @@ const Navbar = () => {
             <img
               src={
                 profileMatch
-                  ? './src/assets/profile-teal.svg'
-                  : './src/assets/profile-gray.svg'
+                  ? 'public/profile-teal.svg'
+                  : 'public/profile-gray.svg'
               }
             />
             Profile Details

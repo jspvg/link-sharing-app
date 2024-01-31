@@ -74,15 +74,15 @@ input[type='url'] {
 }
 
 input[type='email'] {
-  background-image: url('./assets/envelope.svg');
+  background-image: url('public/envelope.svg');
 }
 
 input[type='password'] {
-  background-image: url('./assets/lock.svg');
+  background-image: url('public/lock.svg');
 }
 
 input[type='url'] {
-  background-image: url('./assets/link-gray.svg');
+  background-image: url('public/link-gray.svg');
   background-position: 1% center !important;
 }
 
