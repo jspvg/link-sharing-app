@@ -1,11 +1,23 @@
+import { useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useUserDetails } from '../hooks/useUserDetails';
 import '../styles/components/mockup.scss';
 import LargePlatform from './platform/LargePlatform';
+import { fetchUserDetails, fetchUserPlatforms } from '../lib/api/queries';
 
-const MobileMockup = () => {
+const MobileMockup = ({ userId }: { userId?: string }) => {
   const { user } = useUser();
-  const { userPlatforms, userDetails } = useUserDetails();
+  const { userPlatforms, setUserPlatforms, userDetails, setUserDetails } =
+    useUserDetails();
+
+  useEffect(() => {
+    const id = userId || user?.id;
+    if (id) {
+      fetchUserPlatforms(id).then(setUserPlatforms).catch(console.error);
+      fetchUserDetails(id).then(setUserDetails).catch(console.error);
+    }
+  }, [user, userId, setUserDetails, setUserPlatforms]);
+
   if (!userPlatforms) {
     return (
       <div className="link-element" key={Math.random()}>

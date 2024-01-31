@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import MobileMockup from '../components/MobileMockup';
 import '../styles/components/preview.scss';
 import { useEffect, useState } from 'react';
@@ -11,12 +11,11 @@ const Preview = () => {
   const { user } = useUser();
   const { setUserDetails } = useUserDetails();
   const [isCopied, setIsCopied] = useState(false);
+  const { userId } = useParams();
 
   useEffect(() => {
-    if (user) {
-      fetchUserDetails(user.id).then(setUserDetails).catch(console.error);
-    }
-  }, [setUserDetails, user]);
+    fetchUserDetails(userId!).then(setUserDetails).catch(console.error);
+  }, [setUserDetails, userId]);
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard
@@ -40,9 +39,12 @@ const Preview = () => {
       <div className="preview-body">
         <nav>
           <div className="nav-div-preview">
-            <NavLink to="/" className="nav-link nav-preview">
-              Back to Editor
-            </NavLink>
+            {user && user.id === userId && (
+              <NavLink to="/" className="nav-link nav-preview">
+                Back to Editor
+              </NavLink>
+            )}
+
             <button className="share-button" onClick={handleButtonClick}>
               Share Link
             </button>
@@ -50,7 +52,7 @@ const Preview = () => {
         </nav>
 
         <div className="phone">
-          <MobileMockup />
+          <MobileMockup userId={userId} />
         </div>
       </div>
       <div className="popup-div">

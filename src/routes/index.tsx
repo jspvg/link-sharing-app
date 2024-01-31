@@ -49,12 +49,8 @@ export const Router = createBrowserRouter([
         ),
       },
       {
-        path: 'Preview',
-        element: (
-          <ProtectedRoute>
-            <Preview />
-          </ProtectedRoute>
-        ),
+        path: 'preview/:userId',
+        element: <Preview />,
       },
       {
         path: 'logout',
