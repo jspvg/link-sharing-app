@@ -7,8 +7,7 @@ import { useUserDetails } from '../hooks/useUserDetails';
 
 const Links = () => {
   const { user } = useUser();
-  const { userPlatforms, setUserPlatforms, setUserDetails } =
-    useUserDetails();
+  const { setUserDetails } = useUserDetails();
 
   useEffect(() => {
     if (user) {
@@ -23,10 +22,7 @@ const Links = () => {
           <MobileMockup />
         </div>
         <div className="right">
-          <CustomizeLinks
-            userPlatforms={userPlatforms}
-            setUserPlatforms={setUserPlatforms}
-          />
+          <CustomizeLinks />
         </div>
       </div>
     </div>

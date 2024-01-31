@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { UserPlatform } from '../lib/types';
 import Dropdown from './elements/Dropdown';
 import SmallPlatform from './platform/SmallPlatform';
 import '../styles/components/customize.scss';
@@ -7,36 +6,29 @@ import usePlatforms from '../hooks/usePlatforms';
 import { useUser } from '../hooks/useUser';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormSchema } from '../lib/validation/customizeLinksSchemas';
+import {
+  FormSchema,
+  emptyPlatform,
+} from '../lib/validation/customizeLinksSchemas';
 import {
   FormData,
   removeUserPlatform,
   saveUserPlatform,
 } from '../lib/api/apiCalls/customizeLinksAPI';
+import { useUserDetails } from '../hooks/useUserDetails';
 
-const emptyPlatform = {
-  platform_id: '',
-  name: '',
-  logo_gray: '',
-  logo_white: '',
-  color: '',
-  url: '',
-};
-
-const CustomizeLinks = ({
-  userPlatforms,
-  setUserPlatforms,
-}: {
-  userPlatforms: UserPlatform[];
-  setUserPlatforms: React.Dispatch<React.SetStateAction<UserPlatform[]>>;
-}) => {
+const CustomizeLinks = () => {
   const { user } = useUser();
+  const { userPlatforms, setUserPlatforms } = useUserDetails();
 
   const [isLoadingUserPlatforms, setIsLoadingUserPlatforms] = useState(true);
 
   const platforms = usePlatforms();
 
   const [isAddingPlatform, setIsAddingPlatform] = useState(false);
+
+  const [existsError, setExistsError] = useState('');
+  const [maxPlatformsError, setMaxPlatformsError] = useState('');
 
   useEffect(() => {
     if (userPlatforms) {
@@ -49,6 +41,7 @@ const CustomizeLinks = ({
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm({
     resolver: zodResolver(FormSchema),
     mode: 'onBlur',
@@ -64,19 +57,33 @@ const CustomizeLinks = ({
 
   const handleAddLink = useCallback(() => {
     if (userPlatforms.length >= 5) {
-      alert('You cannot add more than 5 platforms.');
+      setMaxPlatformsError('You cannot add more than 5 platforms.');
       return;
     }
 
+    setMaxPlatformsError('');
     setIsAddingPlatform(true);
   }, [userPlatforms]);
 
   const handleSaveLink = useCallback(() => {
     handleSubmit((data) => {
+      const platformExists = userPlatforms.some(
+        (platform) =>
+          platform.platform_id === data.selectedPlatform.platform_id,
+      );
+
+      if (platformExists) {
+        setExistsError('This platform has already been added.');
+        return;
+      }
+      setExistsError('');
+
       saveUserPlatform(data as FormData, user, setUserPlatforms);
       setIsAddingPlatform(false);
+
+      reset({ selectedPlatform: emptyPlatform, platformUrl: '' });
     })();
-  }, [handleSubmit, user, setUserPlatforms]);
+  }, [handleSubmit, userPlatforms, user, setUserPlatforms, reset]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingPlatform(false);
@@ -122,6 +129,7 @@ const CustomizeLinks = ({
         })}
       </div>
       <div className={`customize-body`}>
+        {maxPlatformsError && <p className="error">{maxPlatformsError}</p>}
         {isAddingPlatform && (
           <form className="link-form">
             <div className="form-header">
@@ -162,6 +170,7 @@ const CustomizeLinks = ({
             )}
           </form>
         )}
+        {existsError && <p className="error">{existsError}</p>}
       </div>
       <div className="save-button">
         <button
