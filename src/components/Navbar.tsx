@@ -50,9 +50,15 @@ const Navbar = () => {
           </NavLink>
         </div>
         <div className="nav-div">
-          <NavLink className="nav-link nav-preview" to={`/preview/${user!.id}`}>
-            Preview
-          </NavLink>
+          {user && (
+            <NavLink
+              className="nav-link nav-preview"
+              to={`/preview/${user!.id}`}
+            >
+              Preview
+            </NavLink>
+          )}
+
           <button
             className="nav-link nav-preview"
             style={{ height: '75%' }}
