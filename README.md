@@ -26,7 +26,7 @@ This is a link sharing application built using Vite, React, TypeScript, and Supa
 
 The application uses a Supabase database. Here is an image of the database schema:
 
-![Database Schema](public\dbSchema.png)
+![Database Schema](public/dbSchema.png)
 
 ## Deployment
 
