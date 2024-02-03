@@ -17,8 +17,24 @@ This is a link sharing application built using Vite, React, TypeScript, and Supa
 
 1. Clone the repository
 2. Install the dependencies using `npm install`
-3. Start the development server using `npm run dev`
-4. Visit `http://localhost:5173` in your browser
+3. Create a `.env` file in the root directory and add your Supabase URL and API key:
+   VITE_SUPABASE_URL=<Your Supabase URL> VITE_SUPABASE_API_KEY=<Your Supabase API Key>
+4. Start the development server using `npm run dev`
+5. Visit `http://localhost:5173` in your browser
+
+## Database Schema
+
+The application uses a Supabase database. Here is an image of the database schema:
+
+![Database Schema](public\dbSchema.png)
+
+## Deployment
+
+The application is deployed on Netlify. The link to the live application is provided in the repository description.
+
+## Continuous Integration/Continuous Deployment (CI/CD)
+
+A GitHub workflow is set up for this project to rebuild the application whenever there is a push to the main branch. The workflow configuration is located in `.github/workflows/main.yml`.
 
 ## Future Improvements
 
