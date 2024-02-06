@@ -48,3 +48,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Design Acknowledgement
 
 This application's design is based on a modified [Frontend Mentor Figma](https://www.frontendmentor.io/challenges/linksharing-app-Fbt7yweGsT) design. The original design has been tweaked to fit the requirements of this project.
+All icons are from [iconify](https://icon-sets.iconify.design/).

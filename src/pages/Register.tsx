@@ -1,13 +1,14 @@
-import { z } from "zod";
-import Logo from "../components/Logo";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/api/supabase";
+import { z } from 'zod';
+import Logo from '../components/Logo';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/api/supabase';
+import { useState } from 'react';
 
 const baseSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "Password must be at least 8 characters").max(25),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(8, 'Password must be at least 8 characters').max(25),
   passwordConfirm: z.string().min(8).max(25),
 });
 
@@ -16,14 +17,15 @@ const schema = baseSchema
     passwordConfirm: z.string().min(8).max(25),
   })
   .refine((data) => data.password === data.passwordConfirm, {
-    message: "Passwords do not match",
-    path: ["passwordConfirm"],
+    message: 'Passwords do not match',
+    path: ['passwordConfirm'],
   });
 
 type RegisterForm = z.infer<typeof schema>;
 
 const Register = () => {
   const navigate = useNavigate();
+  const [duplicateEmailError, setDuplicateEmailError] = useState('');
 
   const {
     register,
@@ -31,7 +33,7 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(schema),
-    mode: "onBlur",
+    mode: 'onBlur',
   });
 
   const registerUser = async (formData: RegisterForm) => {
@@ -43,10 +45,15 @@ const Register = () => {
     });
 
     if (error) {
-      console.error("Error signing up:", error.message);
+      console.error('Error signing up:', error.message);
+      if (error.message === 'User already registered') {
+        setDuplicateEmailError(
+          'Email already in use.',
+        );
+      }
     } else {
-      console.log("Success registration!");
-      navigate("/login");
+      setDuplicateEmailError('');
+      navigate('/login');
     }
   };
 
@@ -65,9 +72,12 @@ const Register = () => {
               type="email"
               id="email"
               placeholder="eg. alex@email.com"
-              {...register("email")}
+              {...register('email')}
             />
             {errors.email && <p className="error">{errors.email.message}</p>}
+            {duplicateEmailError && (
+              <p className="error">{duplicateEmailError}</p>
+            )}
           </div>
           <div className="element-input">
             <label htmlFor="password">Create Password</label>
@@ -75,7 +85,7 @@ const Register = () => {
               type="password"
               id="password"
               placeholder="At least 8 characters"
-              {...register("password")}
+              {...register('password')}
             />
             {errors.password && (
               <p className="error">{errors.password.message}</p>
@@ -87,7 +97,7 @@ const Register = () => {
               type="password"
               id="passwordConfirm"
               placeholder="At least 8 characters"
-              {...register("passwordConfirm")}
+              {...register('passwordConfirm')}
             />
             {errors.passwordConfirm && (
               <p className="error">{errors.passwordConfirm.message}</p>
