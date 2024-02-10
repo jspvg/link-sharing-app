@@ -2,15 +2,29 @@ import { UserDetails, UserPlatform } from '../types';
 import { supabase } from './supabase';
 
 export const addUserPlatform = async (userPlatform: UserPlatform) => {
-  const { error } = await supabase
+  const { count, error: updateError } = await supabase
     .from('user_platforms')
-    .insert({
-      user_id: userPlatform.user_id,
-      platform_id: userPlatform.platform_id,
-      url: userPlatform.url,
-    })
-    .select();
-  if (error) throw error;
+    .update({ url: userPlatform.url })
+    .eq('user_id', userPlatform.user_id)
+    .eq('platform_id', userPlatform.platform_id);
+
+  if (updateError) {
+    console.error('Update error:', updateError);
+    throw updateError;
+  }
+
+  console.log('Update count:', count);
+
+  if (!count) {
+    const { error: insertError } = await supabase
+      .from('user_platforms')
+      .insert(userPlatform);
+
+    if (insertError) {
+      console.error('Insert error:', insertError);
+      throw insertError;
+    }
+  }
 };
 
 export const deleteUserPlatform = async ({

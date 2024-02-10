@@ -33,6 +33,7 @@ export function saveUserPlatform(
   data: FormData,
   user: User | null,
   setUserPlatforms: React.Dispatch<React.SetStateAction<UserPlatform[]>>,
+  editingPlatform: UserPlatform | null,
 ) {
   const newUserPlatform: UserPlatform = {
     user_id: user!.id,
@@ -40,7 +41,17 @@ export function saveUserPlatform(
     url: data.platformUrl,
   };
 
-  setUserPlatforms((prevPlatforms) => [...prevPlatforms, newUserPlatform]);
+  setUserPlatforms((prevPlatforms) => {
+    if (editingPlatform) {
+      return prevPlatforms.map((platform) =>
+        platform.platform_id === editingPlatform.platform_id
+          ? newUserPlatform
+          : platform,
+      );
+    } else {
+      return [...prevPlatforms, newUserPlatform];
+    }
+  });
 
   addUserPlatform(newUserPlatform);
 }

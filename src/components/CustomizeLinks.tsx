@@ -43,15 +43,6 @@ const CustomizeLinks = () => {
     }
   }, [userPlatforms]);
 
-  const handleEditingPlatform = () => {
-    if (editingPlatform) {
-      const newEditPlatform = platforms.find(
-        (platform) => editingPlatform.platform_id === platform.platform_id,
-      );
-      setPlatformToEdit(newEditPlatform);
-    }
-  };
-
   const {
     register,
     handleSubmit,
@@ -71,6 +62,15 @@ const CustomizeLinks = () => {
     [setUserPlatforms, userPlatforms],
   );
 
+  const handleEditingPlatform = (user_platform: UserPlatform) => {
+    if (user_platform) {
+      const newEditPlatform = platforms.find(
+        (platform) => user_platform.platform_id === platform.platform_id,
+      );
+      setPlatformToEdit(newEditPlatform);
+    }
+  };
+
   const handleAddLink = useCallback(() => {
     if (userPlatforms.length >= 5) {
       setMaxPlatformsError('You cannot add more than 5 platforms.');
@@ -89,13 +89,25 @@ const CustomizeLinks = () => {
           platform.platform_id === data.selectedPlatform.platform_id,
       );
 
-      if (platformExists) {
+      if (editingPlatform) {
+        saveUserPlatform(
+          data as FormData,
+          user,
+          setUserPlatforms,
+          editingPlatform,
+        );
+      } else if (platformExists) {
         setExistsError('This platform has already been added.');
         return;
+      } else {
+        saveUserPlatform(
+          data as FormData,
+          user,
+          setUserPlatforms,
+          editingPlatform,
+        );
       }
       setExistsError('');
-
-      saveUserPlatform(data as FormData, user, setUserPlatforms);
 
       setIsAddingPlatform(false);
       setEditingPlatform(null);
@@ -103,7 +115,14 @@ const CustomizeLinks = () => {
 
       reset({ selectedPlatform: emptyPlatform, platformUrl: '' });
     })();
-  }, [handleSubmit, reset, userPlatforms, setUserPlatforms, user]);
+  }, [
+    handleSubmit,
+    userPlatforms,
+    editingPlatform,
+    user,
+    setUserPlatforms,
+    reset,
+  ]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingPlatform(false);
@@ -140,7 +159,7 @@ const CustomizeLinks = () => {
                 handleEditPlatform={() => {
                   setEditingPlatform(userPlatforms[index]);
                   setIsAddingPlatform(true);
-                  handleEditingPlatform();
+                  handleEditingPlatform(userPlatforms[index]);
                 }}
               />
             );
