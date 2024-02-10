@@ -16,6 +16,7 @@ import {
   saveUserPlatform,
 } from '../lib/api/apiCalls/customizeLinksAPI';
 import { useUserDetails } from '../hooks/useUserDetails';
+import { Platform, UserPlatform } from '../lib/types';
 
 const CustomizeLinks = () => {
   const { user } = useUser();
@@ -26,6 +27,12 @@ const CustomizeLinks = () => {
   const platforms = usePlatforms();
 
   const [isAddingPlatform, setIsAddingPlatform] = useState(false);
+  const [editingPlatform, setEditingPlatform] = useState<UserPlatform | null>(
+    null,
+  );
+  const [platformToEdit, setPlatformToEdit] = useState<Platform | undefined>(
+    undefined,
+  );
 
   const [existsError, setExistsError] = useState('');
   const [maxPlatformsError, setMaxPlatformsError] = useState('');
@@ -35,6 +42,15 @@ const CustomizeLinks = () => {
       setIsLoadingUserPlatforms(false);
     }
   }, [userPlatforms]);
+
+  const handleEditingPlatform = () => {
+    if (editingPlatform) {
+      const newEditPlatform = platforms.find(
+        (platform) => editingPlatform.platform_id === platform.platform_id,
+      );
+      setPlatformToEdit(newEditPlatform);
+    }
+  };
 
   const {
     register,
@@ -63,6 +79,7 @@ const CustomizeLinks = () => {
 
     setMaxPlatformsError('');
     setIsAddingPlatform(true);
+    setEditingPlatform(null);
   }, [userPlatforms]);
 
   const handleSaveLink = useCallback(() => {
@@ -79,11 +96,14 @@ const CustomizeLinks = () => {
       setExistsError('');
 
       saveUserPlatform(data as FormData, user, setUserPlatforms);
+
       setIsAddingPlatform(false);
+      setEditingPlatform(null);
+      setPlatformToEdit(undefined);
 
       reset({ selectedPlatform: emptyPlatform, platformUrl: '' });
     })();
-  }, [handleSubmit, userPlatforms, user, setUserPlatforms, reset]);
+  }, [handleSubmit, reset, userPlatforms, setUserPlatforms, user]);
 
   const handleCancelAdd = useCallback(() => {
     setIsAddingPlatform(false);
@@ -117,6 +137,11 @@ const CustomizeLinks = () => {
                 userPlatform={userPlatforms[index]}
                 index={index}
                 handleRemovePlatform={handleRemovePlatform}
+                handleEditPlatform={() => {
+                  setEditingPlatform(userPlatforms[index]);
+                  setIsAddingPlatform(true);
+                  handleEditingPlatform();
+                }}
               />
             );
           } else {
@@ -133,7 +158,7 @@ const CustomizeLinks = () => {
         {isAddingPlatform && (
           <form className="link-form">
             <div className="form-header">
-              <h2>New Link</h2>
+              <h2>Link</h2>
               <p>
                 <button onClick={handleCancelAdd}>Cancel</button>
               </p>
@@ -143,7 +168,7 @@ const CustomizeLinks = () => {
             <Controller
               name="selectedPlatform"
               control={control}
-              defaultValue={emptyPlatform}
+              defaultValue={editingPlatform ? platformToEdit : emptyPlatform}
               render={({ field }) => (
                 <Dropdown
                   platforms={platforms}
@@ -163,6 +188,7 @@ const CustomizeLinks = () => {
               type="url"
               className="element-input"
               placeholder="e.g. https://www.github.com/johnappleseed"
+              defaultValue={editingPlatform ? editingPlatform.url : ''}
               {...register('platformUrl')}
             />
             {errors.platformUrl?.message && (
