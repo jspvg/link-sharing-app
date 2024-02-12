@@ -7,7 +7,7 @@ This is a link sharing application built using Vite, React, TypeScript, and Supa
 ## Features
 
 - **Authentication**: Users can securely register and log in using their email. Authentication is handled by Supabase.
-- **Link Management**: Users can add up to 5 links to their social media accounts. Each link can be previewed in a mocked mobile phone format and tested for functionality. Users can also view a list of their added links and remove them if necessary.
+- **Link Management**: Users can add up to 5 links to their social media accounts. Each link can be previewed in a mocked mobile phone format and tested for functionality. Users can also view a list of their added links, edit and remove them if necessary. User can edit an added link by clicking on the small platform card under the 'Add new link' button.
 - **Profile Management**: Users can add a profile picture, their first name, last name, and change their email. Upon changing the email, the user receives an email from Supabase to handle the email change. The profile details can also be previewed in a mocked mobile phone format.
 - **Form Validation**: All form validation in the app is handled by Zod.
 - **Preview and Share**: Users can preview their profile and links, and choose to share the preview by clicking the "share link" button, which copies the URL to their clipboard. If they are not happy with the preview, they can go back to their editor by clicking the "back to editor" button.
@@ -39,7 +39,6 @@ A GitHub workflow is set up for this project to rebuild the application whenever
 ## Future Improvements
 
 - Make the page responsive
-- Add an edit functionality to the links page
 
 ## Contributing
 
