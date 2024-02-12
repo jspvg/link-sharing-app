@@ -6,12 +6,14 @@ type SmallPlatformProps = {
   userPlatform: UserPlatform;
   index: number;
   handleRemovePlatform: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleEditPlatform: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const SmallPlatform = ({
   userPlatform,
   index,
   handleRemovePlatform,
+  handleEditPlatform,
 }: SmallPlatformProps) => {
   const [platform, setPlatform] = useState<Platform>();
 
@@ -44,6 +46,7 @@ const SmallPlatform = ({
       className="platform"
       key={index}
       style={{ backgroundColor: `${platform!.color}` }}
+      onClick={(event) => handleEditPlatform(event)}
     >
       <div>
         <img src={platform!.logo_white} alt="" />

@@ -1,15 +1,11 @@
 import { UserDetails, UserPlatform } from '../types';
 import { supabase } from './supabase';
 
-export const addUserPlatform = async (userPlatform: UserPlatform) => {
+export const upsertUserPlatform = async (userPlatform: UserPlatform) => {
   const { error } = await supabase
     .from('user_platforms')
-    .insert({
-      user_id: userPlatform.user_id,
-      platform_id: userPlatform.platform_id,
-      url: userPlatform.url,
-    })
-    .select();
+    .upsert([userPlatform], { onConflict: 'user_id,platform_id' });
+
   if (error) throw error;
 };
 
