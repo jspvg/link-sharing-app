@@ -1,6 +1,9 @@
 import { User } from '@supabase/supabase-js';
 import { Platform, UserPlatform } from '../../types';
-import { deleteUserPlatform, addUserPlatform } from '../mutations';
+import {
+  deleteUserPlatform,
+  upsertUserPlatform,
+} from '../mutations';
 
 export type FormData = {
   selectedPlatform: Platform;
@@ -29,7 +32,7 @@ export async function removeUserPlatform(
   );
 }
 
-export function saveUserPlatform(
+export async function saveUserPlatform(
   data: FormData,
   user: User | null,
   setUserPlatforms: React.Dispatch<React.SetStateAction<UserPlatform[]>>,
@@ -40,6 +43,15 @@ export function saveUserPlatform(
     platform_id: data.selectedPlatform.platform_id,
     url: data.platformUrl,
   };
+
+  if (editingPlatform) {
+    await deleteUserPlatform({
+      user_id: editingPlatform.user_id,
+      platform_id: editingPlatform.platform_id,
+    });
+  }
+
+  await upsertUserPlatform(newUserPlatform);
 
   setUserPlatforms((prevPlatforms) => {
     if (editingPlatform) {
@@ -53,5 +65,4 @@ export function saveUserPlatform(
     }
   });
 
-  addUserPlatform(newUserPlatform);
 }

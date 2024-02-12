@@ -1,30 +1,12 @@
 import { UserDetails, UserPlatform } from '../types';
 import { supabase } from './supabase';
 
-export const addUserPlatform = async (userPlatform: UserPlatform) => {
-  const { count, error: updateError } = await supabase
+export const upsertUserPlatform = async (userPlatform: UserPlatform) => {
+  const { error } = await supabase
     .from('user_platforms')
-    .update({ url: userPlatform.url })
-    .eq('user_id', userPlatform.user_id)
-    .eq('platform_id', userPlatform.platform_id);
+    .upsert([userPlatform], { onConflict: 'user_id,platform_id' });
 
-  if (updateError) {
-    console.error('Update error:', updateError);
-    throw updateError;
-  }
-
-  console.log('Update count:', count);
-
-  if (!count) {
-    const { error: insertError } = await supabase
-      .from('user_platforms')
-      .insert(userPlatform);
-
-    if (insertError) {
-      console.error('Insert error:', insertError);
-      throw insertError;
-    }
-  }
+  if (error) throw error;
 };
 
 export const deleteUserPlatform = async ({
