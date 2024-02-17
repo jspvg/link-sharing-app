@@ -9,8 +9,7 @@
   align-self: stretch;
 }
 
-.page-body,
-.body-landing {
+.page-body {
   @extend %flex-container;
   @extend %flex-column;
   gap: 24px;
@@ -18,28 +17,63 @@
 }
 
 .body-landing {
-  height: 100dvh;
+  border: 3px solid $pale-gray;
+  background-image: url('public/bg-linksharing.png');
+  height: 80dvh;
 }
 
-.page-container,
-.page-landing {
+.body-landing,
+.page-container {
   @extend %flex-container;
   @extend %flex-row;
   border-radius: 8px;
   gap: 24px;
-  margin: 0px 24px 24px;
   width: 100%;
 }
 
 .page-container {
   background-color: $grayish-white;
+  margin: 0px 24px 24px;
 }
 
 .page-landing {
-  flex-direction: column;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  @extend %flex-column;
+  border: 3px solid $pale-gray;
+  border-radius: 8px;
   background-color: white;
-  height: 80dvh;
+  padding: 20px;
+  height: 30%;
 }
+
+.landing-align {
+  @extend %flex-container;
+  a{
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-landing {
+    text-align: center;
+  }
+  .landing-align {
+    flex-direction: column;
+    p {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+/*@media (max-width: 375px) {
+  .landing-align {
+    p {
+      flex-wrap: wrap;
+    }
+  }
+}*/
 
 .left {
   @extend %page-section;

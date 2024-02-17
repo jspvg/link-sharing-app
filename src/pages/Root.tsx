@@ -5,8 +5,9 @@ export default function Root() {
   const homeMatch = useMatch('/');
   const profileMatch = useMatch('/profile');
   const previewMatch = useMatch('/preview');
+  const landingMatch = useMatch('/landing');
   return (
-    <div className={previewMatch ? 'no-padding' : 'padding'}>
+    <div className={previewMatch || landingMatch ? 'no-padding' : 'padding'}>
       {homeMatch || profileMatch ? <Navbar /> : <></>}
       <Outlet />
     </div>
