@@ -61,11 +61,9 @@ const Register = () => {
     <section>
       <Logo />
       <div className="login-body">
-        <div className="login-header">
+        <form className="login-form" onSubmit={handleSubmit(registerUser)}>
           <h2 className="login-h2">Create account</h2>
           <p>Let's get you started showing your links!</p>
-        </div>
-        <form className="login-form" onSubmit={handleSubmit(registerUser)}>
           <div className="element-input">
             <label htmlFor="email">Email address</label>
             <input

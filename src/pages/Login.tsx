@@ -48,16 +48,13 @@ const Login = () => {
     <section>
       <Logo />
       <div className="login-body">
-        <div className="login-header">
-          <h2 className="login-h2">Login</h2>
-          <p>Add you details below to get back into the app</p>
-        </div>
-
         <form
           action="submit"
           onSubmit={handleSubmit(loginUser)}
           className="login-form"
         >
+          <h2 className="login-h2">Login</h2>
+          <p>Add you details below to get back into the app</p>
           <div className="element-input">
             <label htmlFor="email">Email address</label>
             <input

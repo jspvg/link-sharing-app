@@ -31,12 +31,6 @@ label {
   padding: 0px 40px 40px 40px;
 }
 
-.form-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .link-form {
   @extend %form-flex;
   background-color: $grayish-white;
