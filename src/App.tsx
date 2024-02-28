@@ -1,8 +1,8 @@
 import { RouterProvider } from 'react-router-dom';
-import './App.scss';
 import { Router } from './routes';
 import { UserProvider } from './providers/UserProvider';
 import { UserDetailsProvider } from './providers/UserDetailsProvider';
+import './styles/global.scss';
 
 function App() {
   return (

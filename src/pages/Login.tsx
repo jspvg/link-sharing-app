@@ -45,39 +45,42 @@ const Login = () => {
   };
 
   return (
-    <section>
+    <>
       <Logo />
-      <div className="login-body">
+      <div id="login">
         <form
           action="submit"
           onSubmit={handleSubmit(loginUser)}
           className="login-form"
         >
           <h2 className="login-h2">Login</h2>
-          <p>Add you details below to get back into the app</p>
-          <div className="element-input">
-            <label htmlFor="email">Email address</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="eg. alex@email.com"
-              {...register('email')}
-            />
-            {errors.email && <p className="error">{errors.email.message}</p>}
-          </div>
-          <div className="element-input">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              {...register('password')}
-            />
-            {errors.password && (
-              <p className="error">{errors.password.message}</p>
-            )}
-          </div>
-          <button type="submit" className="button">
+          <p className="justify-start">
+            Add you details below to get back into the app
+          </p>
+
+          <label htmlFor="email">Email address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="eg. alex@email.com"
+            {...register('email')}
+          />
+          {errors.email && (
+            <span className="error">{errors.email.message}</span>
+          )}
+
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            {...register('password')}
+          />
+          {errors.password && (
+            <span className="error">{errors.password.message}</span>
+          )}
+
+          <button type="submit" id="primary">
             Login
           </button>
           <p>
@@ -85,12 +88,8 @@ const Login = () => {
           </p>
         </form>
         {isError && <Popup message={errorMessage} />}
-        <p className="error">
-          This web app is currently only "responsive" for screens 1440x984 and
-          larger. A more responsive experience is under development...
-        </p>
       </div>
-    </section>
+    </>
   );
 };
 
