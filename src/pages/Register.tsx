@@ -47,9 +47,7 @@ const Register = () => {
     if (error) {
       console.error('Error signing up:', error.message);
       if (error.message === 'User already registered') {
-        setDuplicateEmailError(
-          'Email already in use.',
-        );
+        setDuplicateEmailError('Email already in use.');
       }
     } else {
       setDuplicateEmailError('');
@@ -111,6 +109,10 @@ const Register = () => {
             Already have an account? <a href="/login">Login</a>
           </p>
         </form>
+        <p className="error">
+          This web app is currently only "responsive" for screens 1440x984 and
+          larger. A more responsive experience is under development...
+        </p>
       </div>
     </section>
   );

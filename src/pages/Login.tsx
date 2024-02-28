@@ -88,6 +88,10 @@ const Login = () => {
           </p>
         </form>
         {isError && <Popup message={errorMessage} />}
+        <p className="error">
+          This web app is currently only "responsive" for screens 1440x984 and
+          larger. A more responsive experience is under development...
+        </p>
       </div>
     </section>
   );
