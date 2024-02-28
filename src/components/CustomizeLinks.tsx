@@ -135,6 +135,11 @@ const CustomizeLinks = () => {
   return (
     <>
       <div className="customize-header">
+        <p className="error">
+          This web app is currently only "responsive" for screens 1440x984 and
+          larger. A more responsive experience is under development...
+        </p>
+
         <h1>Customize your links</h1>
         <p className="header-p">
           Add/remove links below and then share all your profiles with the
