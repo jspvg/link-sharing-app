@@ -1,13 +1,12 @@
-import { NavLink, useMatch, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import '../styles/components/navigation.scss';
 import { supabase } from '../lib/api/supabase';
 import { useUser } from '../hooks/useUser';
+import NavLinkItem from './elements/NavLinkItem';
 
 const Navbar = () => {
   const { user, setUser } = useUser();
-  const homeMatch = useMatch('/');
-  const profileMatch = useMatch('/profile');
   const navigate = useNavigate();
 
   const logoutUser = async () => {
@@ -25,46 +24,34 @@ const Navbar = () => {
       <>
         <Logo />
         <div className="nav-div">
-          <NavLink className={`nav-link ${homeMatch ? 'active' : ''}`} to="/">
-            <img
-              src={
-                homeMatch
-                  ? '/link-teal.svg'
-                  : '/link-gray.svg'
-              }
-            />
-            Links
-          </NavLink>
-          <NavLink
-            className={`nav-link ${profileMatch ? 'active' : ''}`}
+          <NavLinkItem
+            to="/"
+            alt="link"
+            src={{ active: '/link-teal.svg', inactive: '/link-gray.svg' }}
+            text="Links"
+          />
+          <NavLinkItem
             to="/profile"
-          >
-            <img
-              src={
-                profileMatch
-                  ? '/profile-teal.svg'
-                  : '/profile-gray.svg'
-              }
-            />
-            Profile Details
-          </NavLink>
+            alt="profile"
+            src={{ active: '/profile-teal.svg', inactive: '/profile-gray.svg' }}
+            text="Profile Details"
+          />
         </div>
         <div className="nav-div">
           {user && (
-            <NavLink
-              className="nav-link nav-preview"
-              to={`/preview/${user!.id}`}
-            >
-              Preview
-            </NavLink>
+            <NavLinkItem
+              to={`/preview/${user.id}`}
+              alt="eye"
+              src={{
+                inactive: '/preview-gray.svg',
+              }}
+              text="Preview"
+            />
           )}
 
-          <button
-            className="nav-link nav-preview"
-            style={{ height: '75%' }}
-            onClick={logoutUser}
-          >
-            Logout
+          <button className="nav-link" onClick={logoutUser} id="logout">
+            <img src="/logout.svg" alt="logout" />
+            <p>Logout</p>
           </button>
         </div>
       </>

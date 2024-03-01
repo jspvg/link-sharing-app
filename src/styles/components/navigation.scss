@@ -1,5 +1,5 @@
-@import "../colors.scss";
-@import "../placeholders.scss";
+@import '../colors.scss';
+@import '../placeholders.scss';
 
 %button {
   border: none;
@@ -19,7 +19,7 @@ nav {
   margin: 24px;
   padding: 16px 24px;
   height: 60px;
-  width: 96.5%;
+  width: 95%;
 }
 
 .nav-div {
@@ -46,6 +46,10 @@ nav {
   font-weight: 600;
   height: 35%;
   align-self: center;
+
+  button {
+    height: 75%
+  }
 }
 
 .nav-preview {
@@ -54,10 +58,37 @@ nav {
 }
 
 .nav-link.active {
-  color: $deep-teal;
   background-color: $pale-teal;
+  p {
+    color: $deep-teal;
+  }
 }
 
 .nav-preview:hover {
   background-color: $pale-teal;
+}
+
+@media (max-width: 1024px) {
+  nav {
+    width: 90%;
+  }
+
+  nav, .nav-div {
+    gap: 8px;
+  }
+
+  .nav-div a, #logout img{
+    padding: 8px;
+  }
+
+  .nav-div button {
+    height: 60%;
+    width: 16px;
+    padding: 16px;
+  }
+
+  .nav-link p,
+  .logo-h2 p {
+    display: none;
+  }
 }
